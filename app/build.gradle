@@ -5,6 +5,25 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    Properties signingProperties = new Properties()
+    def file = project.rootProject.file('signing.properties')
+    if (file.exists()) {
+        signingProperties.load(file.newDataInputStream())
+    }
+    def prodSigning_keystoreFile = new File(projectDir.toString()+ "\\" + signingProperties.getProperty('keystore.file'))
+    def prodSigning_keystorePassword = signingProperties.getProperty('keystore.password')
+    def prodSigning_keyAlias = signingProperties.getProperty('key.alias')
+    def prodSigning_keyPassword = signingProperties.getProperty('key.password')
+
+    signingConfigs {
+        production {
+            storeFile prodSigning_keystoreFile
+            storePassword prodSigning_keystorePassword
+            keyAlias prodSigning_keyAlias
+            keyPassword prodSigning_keyPassword
+        }
+    }
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.homa_inc.androidlabs"
@@ -12,11 +31,31 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        setProperty("archivesBaseName", "MyCompany-MyAppName-$versionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        master {
+            dimension "version"
+        }
+        develop {
+            dimension "version"
+            versionName defaultConfig.versionName + "-dev"
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${variant.name}-${variant.versionName}.apk"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.production
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
