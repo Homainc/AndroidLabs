@@ -5,6 +5,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    String verName = "git describe".execute().text.trim()
+    if(verName.contains('-')){
+        verName = verName.replace('-','.')
+        verName = verName.substring(0, verName.lastIndexOf("."))
+    }
+    else{
+        verName = verName + ".0"
+    }
+
     Properties signingProperties = new Properties()
     def file = project.rootProject.file('signing.properties')
     if (file.exists()) {
@@ -30,7 +39,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName verName
         setProperty("archivesBaseName", "MyCompany-MyAppName-$versionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
