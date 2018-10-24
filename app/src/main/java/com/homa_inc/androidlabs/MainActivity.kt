@@ -1,7 +1,9 @@
 package com.homa_inc.androidlabs
 
 import android.Manifest
+import android.app.PendingIntent.getActivity
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.pm.PackageManager
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if(!resources.getBoolean(R.bool.develop_mode)){
+            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         val textViewVersion = findViewById<TextView>(R.id.textView_version)
         textViewVersion.text = BuildConfig.VERSION_NAME
 
