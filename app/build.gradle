@@ -13,6 +13,10 @@ android {
     else{
         verName = verName + ".0"
     }
+    def (MAJOR, MINOR, PATCH) = verName.replace("v","").tokenize('.')
+    Integer verCode = 1000*Integer.parseInt(MAJOR) + 100*Integer.parseInt(MINOR) + Integer.parseInt(PATCH)
+
+    println(verCode)
 
     Properties signingProperties = new Properties()
     def file = project.rootProject.file('signing.properties')
@@ -38,9 +42,8 @@ android {
         applicationId "com.homa_inc.androidlabs"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 1
+        versionCode verCode
         versionName verName
-        setProperty("archivesBaseName", "MyCompany-MyAppName-$versionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

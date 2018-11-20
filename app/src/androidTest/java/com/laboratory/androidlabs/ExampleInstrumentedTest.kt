@@ -1,4 +1,4 @@
-package com.homa_inc.androidlabs
+package com.laboratory.androidlabs
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

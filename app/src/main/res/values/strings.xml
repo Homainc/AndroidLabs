@@ -2,4 +2,6 @@
     <string name="app_name">AndroidLabs</string>
     <string name="not_access_text">Not access</string>
     <string name="IMEI_exploration_string">"Allow application to make and manage phone calls for show your IMEI"</string>
+    <string name="Exploration_title">Message</string>
+    <string name="OK_string">OK</string>
 </resources>
