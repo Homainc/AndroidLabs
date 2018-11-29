@@ -6,15 +6,14 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     String verName = "git describe".execute().text.trim()
-    if(verName.contains('-')){
-        verName = verName.replace('-','.')
+    if (verName.contains('-')) {
+        verName = verName.replace('-', '.')
         verName = verName.substring(0, verName.lastIndexOf("."))
-    }
-    else{
+    } else {
         verName = verName + ".0"
     }
-    def (MAJOR, MINOR, PATCH) = verName.replace("v","").tokenize('.')
-    Integer verCode = 1000*Integer.parseInt(MAJOR) + 100*Integer.parseInt(MINOR) + Integer.parseInt(PATCH)
+    def (MAJOR, MINOR, PATCH) = verName.replace("v", "").tokenize('.')
+    Integer verCode = 1000 * Integer.parseInt(MAJOR) + 100 * Integer.parseInt(MINOR) + Integer.parseInt(PATCH)
 
     println(verCode)
 
@@ -23,7 +22,7 @@ android {
     if (file.exists()) {
         signingProperties.load(file.newDataInputStream())
     }
-    def prodSigning_keystoreFile = new File(projectDir.toString()+ "\\" + signingProperties.getProperty('keystore.file'))
+    def prodSigning_keystoreFile = new File(projectDir.toString() + "\\" + signingProperties.getProperty('keystore.file'))
     def prodSigning_keystorePassword = signingProperties.getProperty('keystore.password')
     def prodSigning_keyAlias = signingProperties.getProperty('key.alias')
     def prodSigning_keyPassword = signingProperties.getProperty('key.password')
@@ -74,11 +73,17 @@ android {
 }
 
 dependencies {
+    def nav_version = "1.0.0-alpha07"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha01'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
 }

@@ -1,4 +1,4 @@
-package com.laboratory.androidlabs
+package com.homa_inc.androidlabs
 
 import org.junit.Test
 
