@@ -9,8 +9,10 @@
               android:label="HomeFragment"/>
     <navigation android:id="@+id/profileNavigation" app:startDestination="@id/profileViewFragment">
         <fragment android:id="@+id/profileEditFragment" android:name="com.homa_inc.androidlabs.ProfileEditFragment"
-                  android:label="ProfileEditFragment"/>
+                  android:label="ProfileEditFragment">
+        </fragment>
         <fragment android:id="@+id/profileViewFragment" android:name="com.homa_inc.androidlabs.ProfileViewFragment"
-                  android:label="ProfileViewFragment"/>
+                  android:label="ProfileViewFragment">
+        </fragment>
     </navigation>
 </navigation>

@@ -12,6 +12,7 @@
             android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -25,6 +26,7 @@
             android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/surnameTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -38,6 +40,7 @@
             android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phoneTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -51,6 +54,7 @@
             android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -59,6 +63,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
     <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveProfileButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
