@@ -4,15 +4,15 @@
             android:id="@+id/main_graph" app:startDestination="@id/homeFragment">
 
     <fragment android:id="@+id/aboutFragment" android:name="com.homa_inc.androidlabs.AboutFragment"
-              android:label="AboutFragment"/>
+              android:label="AboutFragment"><deepLink app:uri="sdapp://by.myapp/page/3"/></fragment>
     <fragment android:id="@+id/homeFragment" android:name="com.homa_inc.androidlabs.HomeFragment"
-              android:label="HomeFragment"/>
+              android:label="HomeFragment"><deepLink app:uri="sdapp://by.myapp/page/1"/></fragment>
     <navigation android:id="@+id/profileNavigation" app:startDestination="@id/profileViewFragment">
         <fragment android:id="@+id/profileEditFragment" android:name="com.homa_inc.androidlabs.ProfileEditFragment"
                   android:label="ProfileEditFragment">
         </fragment>
         <fragment android:id="@+id/profileViewFragment" android:name="com.homa_inc.androidlabs.ProfileViewFragment"
                   android:label="ProfileViewFragment">
-        </fragment>
+        </fragment><deepLink app:uri="sdapp://by.myapp/page/2"/>
     </navigation>
 </navigation>

@@ -3,6 +3,7 @@ package com.homa_inc.androidlabs.Models
 import android.content.Context
 import com.orm.SugarContext
 import com.orm.SugarRecord
+import com.orm.dsl.Ignore
 
 class User : SugarRecord {
     var name: String? = null
@@ -24,4 +25,6 @@ class User : SugarRecord {
         this.phone = phone
         this.email = email
     }
+    @Ignore
+    fun generateAvatarPath() = "IMG_" +  this.id + ".jpg"
 }
