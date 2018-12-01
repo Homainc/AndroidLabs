@@ -17,4 +17,12 @@
     <string name="label_email">Email</string>
     <string name="text_edit_profile">Edit profile</string>
     <string name="text_save_profile">Save profile</string>
+    <string name="name_required">Name is required</string>
+    <string name="surname_required">Surname is required</string>
+    <string name="email_required">Email is required</string>
+    <string name="phone_number_required">Phone number is required</string>
+    <string name="phone_number_incorrect">Phone number is incorrect</string>
+    <string name="email_incorrect">Email is incorrect</string>
+    <string name="take_photo_from_camera">Take photo from camera</string>
+    <string name="choose_photo_from_gallery">Choose photo from gallery</string>
 </resources>

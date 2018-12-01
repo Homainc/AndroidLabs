@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.Point
+import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -68,6 +69,13 @@ class PictureUtil {
                 ?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
             return File(externalFilesDir, tempFileName)
+        }
+        fun fromUriInBitmap(activity: AppCompatActivity, uri: Uri?) : Bitmap{
+            val parcelFileDescriptor = activity?.contentResolver?.openFileDescriptor(uri as Uri, "r")
+            val fileDescriptor = parcelFileDescriptor?.fileDescriptor
+            val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+            parcelFileDescriptor?.close()
+            return image
         }
     }
 }

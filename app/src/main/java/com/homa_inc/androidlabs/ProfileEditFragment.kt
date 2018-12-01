@@ -30,12 +30,15 @@ import java.io.File
 class ProfileEditFragment : Fragment() {
     private val requestPhotoFromCamera = 0
     private val requestPhotoFromGallery = 1
+    private val phoneNumberRegex: Regex = Regex("^[+][0-9]{10,13}$")
 
     private var nameTextEdit: TextInputEditText? = null
     private var surnameTextEdit: TextInputEditText? = null
     private var phoneTextEdit: TextInputEditText? = null
     private var emailTextEdit: TextInputEditText? = null
     private var editImageView: AppCompatImageView? = null
+    private var photoButton: AppCompatImageButton? = null
+
     private var photoFile: File? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,38 +50,30 @@ class ProfileEditFragment : Fragment() {
         phoneTextEdit = v.findViewById(R.id.phoneTextEdit)
         emailTextEdit = v.findViewById(R.id.emailTextEdit)
         editImageView = v.findViewById(R.id.editImageView)
+        photoButton = v.findViewById<AppCompatImageButton>(R.id.photoButton)
         photoFile = UserUtil.instance.getPhotoFile(context)
-        setupPhotoIntents(v)
+        setupChoosePhotoDialog()
         updateUI()
         return v
     }
-    private fun setupPhotoIntents(v : View){
-        // Camera intent setup
+    private fun setupChoosePhotoDialog(){
         val tempFile = PictureUtil.getTempPhotoFile(context)
-        val photoButton = v.findViewById<AppCompatImageButton>(R.id.photoButton)
-        val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val canTakePhoto = photoFile != null &&
-                captureImage.resolveActivity(activity?.packageManager as PackageManager) != null
-        photoButton.isEnabled = canTakePhoto
-        if(canTakePhoto)
-            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile))
-        // Gallery intent setup
-        val photoPicker = Intent(Intent.ACTION_GET_CONTENT)
-        photoPicker.type = "image/*"
         // Dialog set up
         val builder = AlertDialog.Builder(context as Context)
-        val choices = arrayOf("from camera", "from gallery")
+        val choices = arrayOf(
+            resources.getString(R.string.take_photo_from_camera),
+            resources.getString(R.string.choose_photo_from_gallery))
         builder.apply {
             setCancelable(true)
             setItems(choices){_,which -> run {
                 when(which){
-                    0 -> startActivityForResult(captureImage, requestPhotoFromCamera)
-                    1 -> startActivityForResult(photoPicker, requestPhotoFromGallery)
+                    0 -> takePhotoFromCameraClick(tempFile)
+                    1 -> choosePhotoFromGalleryClick(tempFile)
                 }
             }}
         }
         val dialog = builder.create()
-        photoButton.setOnClickListener{dialog.show()}
+        photoButton?.setOnClickListener{dialog.show()}
     }
 
     private fun updateUI(){
@@ -89,16 +84,68 @@ class ProfileEditFragment : Fragment() {
         emailTextEdit?.setText(user.email)
         updatePhotoView()
     }
+
     private fun saveProfileClick(){
-        val user = UserUtil.instance.loadUser(context)
-        user.name = nameTextEdit?.text.toString()
-        user.surname = surnameTextEdit?.text.toString()
-        user.email = emailTextEdit?.text.toString()
-        user.phone = phoneTextEdit?.text.toString()
-        user.save()
-        if(photoFile?.path != UserUtil.instance.getPhotoFile(context)?.path)
-            PictureUtil.saveUserPicture(context, UserUtil.instance.getPhotoFile(context))
-        findNavController().navigate(R.id.profileViewFragment)
+        if(isInputCorrect()) {
+            val user = UserUtil.instance.loadUser(context)
+            user.name = nameTextEdit?.text.toString()
+            user.surname = surnameTextEdit?.text.toString()
+            user.email = emailTextEdit?.text.toString()
+            user.phone = phoneTextEdit?.text.toString()
+            user.save()
+            if (photoFile?.path != UserUtil.instance.getPhotoFile(context)?.path)
+                PictureUtil.saveUserPicture(context, UserUtil.instance.getPhotoFile(context))
+            findNavController().navigate(R.id.profileViewFragment)
+        }
+    }
+
+    private fun choosePhotoFromGalleryClick(tempFile: File?){
+        if(tempFile == null) {
+            photoButton?.isEnabled = false
+            return
+        }
+        val photoPicker = Intent(Intent.ACTION_GET_CONTENT)
+        photoPicker.type = "image/*"
+        startActivityForResult(photoPicker, requestPhotoFromGallery)
+    }
+
+    private fun takePhotoFromCameraClick(tempFile: File?){
+        val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val canTakePhoto = tempFile != null &&
+                captureImage.resolveActivity(activity?.packageManager as PackageManager) != null
+        photoButton?.isEnabled = canTakePhoto
+        if(!canTakePhoto)
+            return
+        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile))
+        startActivityForResult(captureImage, requestPhotoFromCamera)
+    }
+
+    private fun isInputCorrect(): Boolean{
+        if(nameTextEdit?.text.isNullOrEmpty()) {
+            nameTextEdit?.error = resources.getString(R.string.name_required)
+            return false
+        }
+        else if(surnameTextEdit?.text.isNullOrEmpty()) {
+            surnameTextEdit?.error = resources.getString(R.string.surname_required)
+            return false
+        }
+        else if(emailTextEdit?.text.isNullOrEmpty()) {
+            emailTextEdit?.error = resources.getString(R.string.email_required)
+            return false
+        }
+        else if(phoneTextEdit?.text.isNullOrEmpty()){
+            phoneTextEdit?.error = resources.getString(R.string.phone_number_required)
+            return false
+        }
+        else if(!phoneNumberRegex.matches(phoneTextEdit?.text.toString())) {
+            phoneTextEdit?.error = resources.getString(R.string.phone_number_incorrect)
+            return false
+        }
+        else if(!(emailTextEdit?.text?.contains("@") as Boolean)) {
+            emailTextEdit?.error = resources.getString(R.string.email_required)
+            return false
+        }
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -111,13 +158,8 @@ class ProfileEditFragment : Fragment() {
                 updatePhotoView()
             }
             requestPhotoFromGallery -> {
-                Log.i("checkTAG", data?.data?.toString())
-                val parcelFileDescriptor = activity?.contentResolver?.openFileDescriptor(data?.data as Uri, "r")
-                val fileDescriptor = parcelFileDescriptor?.fileDescriptor
-                val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
-                parcelFileDescriptor?.close()
                 photoFile = PictureUtil.getTempPhotoFile(context)
-                PictureUtil.savePicture(image, photoFile)
+                PictureUtil.savePicture(PictureUtil.fromUriInBitmap(activity as AppCompatActivity, data?.data), photoFile)
                 updatePhotoView()
             }
         }
