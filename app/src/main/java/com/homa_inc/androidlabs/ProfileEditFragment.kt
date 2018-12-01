@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.FileProvider
 import androidx.core.graphics.BitmapCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -116,7 +117,10 @@ class ProfileEditFragment : Fragment() {
         photoButton?.isEnabled = canTakePhoto
         if(!canTakePhoto)
             return
-        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile))
+        captureImage.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        val imgUri = FileProvider.getUriForFile(context as Context,
+           BuildConfig.APPLICATION_ID, tempFile as File)
+        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
         startActivityForResult(captureImage, requestPhotoFromCamera)
     }
 

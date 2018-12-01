@@ -35,16 +35,13 @@ class PictureUtil {
                     inSampleSize = srcWidth / destWidth
             }
             options = BitmapFactory.Options()
-            options.inSampleSize = inSampleSize
+            options.inSampleSize = inSampleSize*2
             return BitmapFactory.decodeFile(path, options) as Bitmap
         }
         fun getScaledBitmap(path: String, activity: AppCompatActivity): Bitmap{
             var size = Point()
             activity.windowManager.defaultDisplay.getSize(size)
-            val matrix = Matrix().apply { postRotate(-90f) }
-            val scaledBitmap = getScaledBitmap(path, size.x, size.y)
-            return Bitmap.createBitmap(scaledBitmap, 0, 0,
-                scaledBitmap.width, scaledBitmap.height, matrix, true)
+            return getScaledBitmap(path, size.x, size.y)
         }
         fun getRoundedBitMap(path: String,activity: AppCompatActivity): RoundedBitmapDrawable{
             val dr = RoundedBitmapDrawableFactory.create(activity.resources, getScaledBitmap(path, activity))
@@ -71,7 +68,7 @@ class PictureUtil {
             return File(externalFilesDir, tempFileName)
         }
         fun fromUriInBitmap(activity: AppCompatActivity, uri: Uri?) : Bitmap{
-            val parcelFileDescriptor = activity?.contentResolver?.openFileDescriptor(uri as Uri, "r")
+            val parcelFileDescriptor = activity.contentResolver?.openFileDescriptor(uri as Uri, "r")
             val fileDescriptor = parcelFileDescriptor?.fileDescriptor
             val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
             parcelFileDescriptor?.close()

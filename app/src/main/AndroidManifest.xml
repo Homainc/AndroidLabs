@@ -10,6 +10,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <provider android:authorities="${applicationId}"
+                  android:name="androidx.core.content.FileProvider"
+                  android:exported="false"
+                  android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                       android:resource="@xml/file_paths"/>
+        </provider>
         <meta-data android:name="DATABASE" android:value="app_users.db"/>
         <meta-data android:name="VERSION" android:value="1"/>
         <meta-data android:name="QUERY_LOG" android:value="true"/>
