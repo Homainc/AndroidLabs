@@ -8,13 +8,18 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.homa_inc.androidlabs.BuildConfig
 import com.homa_inc.androidlabs.R
 
@@ -25,6 +30,12 @@ class AboutFragment : Fragment() {
     }
     private var textIMEI: AppCompatTextView? = null
     private var textVersion: AppCompatTextView? = null
+    private var navController: NavController? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
@@ -32,7 +43,12 @@ class AboutFragment : Fragment() {
         textIMEI = v.findViewById(R.id.textView_IMEI) as AppCompatTextView
         textVersion = v.findViewById(R.id.textView_version) as AppCompatTextView
         textVersion?.text = BuildConfig.VERSION_NAME
+        navController = Navigation.findNavController(activity as AppCompatActivity, R.id.nav_auth_host_fragment)
         showIMEI()
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
         return v
     }
 
@@ -94,5 +110,19 @@ class AboutFragment : Fragment() {
             }}
         val exploration = builder.create()
         exploration.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            android.R.id.home -> {
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                    setDisplayHomeAsUpEnabled(false)
+                    setHomeButtonEnabled(false)
+                }
+                navController?.popBackStack()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

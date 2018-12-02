@@ -1,6 +1,8 @@
 package com.homa_inc.androidlabs.Activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -20,11 +22,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bottomNavigation = findViewById(R.id.bottom_navigation)
-        navController  = Navigation.findNavController(this@MainActivity,
-            R.id.nav_host_fragment
-        )
+        navController  = Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
         bottomNavigation?.setupWithNavController(navController as NavController)
         UserUtil.init(this)
+        startActivity(Intent(this, AuthActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -35,7 +36,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
-            R.id.appbar_item_about -> navController?.navigate(R.id.aboutFragment)
+            R.id.appbar_item_about -> {
+                navController?.navigate(R.id.aboutFragment)
+                return true
+            }
+            R.id.home -> {
+                Log.i("checkTAG", "act_home")
+                navController?.popBackStack()
+                return true
+            }
+            R.id.homeAsUp -> {
+                Log.i("checkTAG", "act_homeup")
+                navController?.popBackStack()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }

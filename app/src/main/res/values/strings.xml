@@ -15,9 +15,11 @@
     <string name="label_surname">Surname</string>
     <string name="label_phone_number">Phone number</string>
     <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
     <string name="text_edit_profile">Edit profile</string>
     <string name="text_save_profile">Save profile</string>
     <string name="name_required">Name is required</string>
+    <string name="password_required">Password is required</string>
     <string name="surname_required">Surname is required</string>
     <string name="email_required">Email is required</string>
     <string name="phone_number_required">Phone number is required</string>
@@ -25,4 +27,7 @@
     <string name="email_incorrect">Email is incorrect</string>
     <string name="take_photo_from_camera">Take photo from camera</string>
     <string name="choose_photo_from_gallery">Choose photo from gallery</string>
+    <string name="text_log_in">Log In</string>
+    <string name="text_sign_up">Sign Up</string>
+    <string name="label_confirm_password">Confirm password</string>
 </resources>
