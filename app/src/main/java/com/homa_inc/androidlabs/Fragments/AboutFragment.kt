@@ -1,4 +1,4 @@
-package com.homa_inc.androidlabs
+package com.homa_inc.androidlabs.Fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.homa_inc.androidlabs.BuildConfig
+import com.homa_inc.androidlabs.R
 
 class AboutFragment : Fragment() {
 
@@ -87,7 +89,7 @@ class AboutFragment : Fragment() {
         builder.setTitle(resources.getString(R.string.Exploration_title))
             .setMessage(resources.getString(R.string.IMEI_exploration_string))
             .setCancelable(false)
-            .setNeutralButton(resources.getString(R.string.OK_string)){dialog,_ -> run {
+            .setNeutralButton(resources.getString(R.string.OK_string)){ dialog, _ -> run {
                 requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), _myPermissionsRequestPhoneState)
                 dialog.dismiss()
             }}

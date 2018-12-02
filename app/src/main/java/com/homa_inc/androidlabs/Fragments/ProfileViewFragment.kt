@@ -1,8 +1,6 @@
-package com.homa_inc.androidlabs
+package com.homa_inc.androidlabs.Fragments
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import com.homa_inc.androidlabs.Models.User
+import com.homa_inc.androidlabs.R
 import com.homa_inc.androidlabs.Utils.PictureUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
-import com.orm.SugarContext
-import com.orm.SugarRecord
-import java.lang.Exception
 
 class ProfileViewFragment : Fragment() {
 
