@@ -35,7 +35,7 @@ class ProfileViewFragment : Fragment() {
         return v
     }
     private fun updateUI(){
-        val user = UserUtil.instance.loadUser(context)
+        val user = UserUtil.instance.currentUser
         textName?.text = user.name
         textSurname?.text = user.surname
         textPhone?.text = user.phone
@@ -43,7 +43,7 @@ class ProfileViewFragment : Fragment() {
         updatePhotoView()
     }
     private fun updatePhotoView(){
-        val photoFile = UserUtil.instance.getPhotoFile(context)
+        val photoFile = UserUtil.instance.currentPhotoFile
         if(photoFile == null || !photoFile.exists()) {
             profileImageView?.setImageDrawable(null)
             return

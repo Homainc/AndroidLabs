@@ -38,7 +38,7 @@ abstract class ProfileFragment : Fragment() {
     protected var editImageView: AppCompatImageView? = null
     protected var photoButton: AppCompatImageButton? = null
 
-    private var photoFile: File? = null
+    protected var photoFile: File? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(layoutId, container, false)
@@ -48,7 +48,7 @@ abstract class ProfileFragment : Fragment() {
         emailTextEdit = v.findViewById(R.id.emailTextEdit)
         editImageView = v.findViewById(R.id.editImageView)
         photoButton = v.findViewById(R.id.photoButton)
-        photoFile = UserUtil.instance.getPhotoFile(context)
+        photoFile = UserUtil.instance.currentPhotoFile
         setupChoosePhotoDialog()
         return v
     }

@@ -20,7 +20,9 @@ import com.homa_inc.androidlabs.R
 
 class AboutFragment : Fragment() {
 
-    private val _myPermissionsRequestPhoneState = 1
+    companion object {
+        const val REQUEST_PHONE_STATE = 2
+    }
     private var textIMEI: AppCompatTextView? = null
     private var textVersion: AppCompatTextView? = null
 
@@ -37,7 +39,7 @@ class AboutFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
             grantResults: IntArray) {
         when (requestCode) {
-            _myPermissionsRequestPhoneState -> {
+            REQUEST_PHONE_STATE -> {
                 // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     textIMEI?.text = getIMEI()
@@ -45,9 +47,6 @@ class AboutFragment : Fragment() {
                     textIMEI?.text = getString(R.string.not_access_text)
                 }
                 return
-            }
-            else -> {
-                // Ignore all other requests.
             }
         }
     }
@@ -77,7 +76,7 @@ class AboutFragment : Fragment() {
                     Manifest.permission.READ_PHONE_STATE)) {
                 showExploration()
             } else {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), _myPermissionsRequestPhoneState)
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
             }
         } else {
             textIMEI?.text = getIMEI()
@@ -90,7 +89,7 @@ class AboutFragment : Fragment() {
             .setMessage(resources.getString(R.string.IMEI_exploration_string))
             .setCancelable(false)
             .setNeutralButton(resources.getString(R.string.OK_string)){ dialog, _ -> run {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), _myPermissionsRequestPhoneState)
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
                 dialog.dismiss()
             }}
         val exploration = builder.create()

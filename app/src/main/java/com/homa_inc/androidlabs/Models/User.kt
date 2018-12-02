@@ -12,13 +12,11 @@ class User : SugarRecord {
     var phone: String? = null
     var email: String? = null
     constructor(){}
-    constructor(context: Context,
-                name: String?,
+    constructor(name: String?,
                 surname: String?,
                 password:String?,
                 phone: String?,
                 email : String?) {
-        SugarContext.init(context)
         this.name = name
         this.surname = surname
         this.password = password
@@ -26,5 +24,6 @@ class User : SugarRecord {
         this.email = email
     }
     @Ignore
-    fun generateAvatarPath() = "IMG_" +  this.id + ".jpg"
+    val photoPath: String
+            get() = "IMG_" +  this.id + ".jpg"
 }

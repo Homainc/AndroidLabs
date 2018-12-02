@@ -21,7 +21,7 @@
         <meta-data android:name="VERSION" android:value="1"/>
         <meta-data android:name="QUERY_LOG" android:value="true"/>
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.homa_inc.androidlabs"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <nav-graph android:value="@navigation/main_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

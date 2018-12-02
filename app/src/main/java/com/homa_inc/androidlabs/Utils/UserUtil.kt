@@ -11,24 +11,25 @@ class UserUtil private constructor() {
     private object Holder {val INSTANCE = UserUtil() }
     companion object {
         val instance: UserUtil by lazy { Holder.INSTANCE }
+        var picturesDir: File? = null
+        fun init(context: Context?){
+            SugarContext.init(context)
+            picturesDir = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        }
     }
-    fun loadUser(context: Context?) : User{
-        SugarContext.init(context as Context)
-        var user = SugarRecord.first(User::class.java)
-        if(user == null)
-            user = initDefaultUser(context)
-        return user
-    }
-    private fun initDefaultUser(context: Context?) : User{
-        val user = User(context as Context,"empty", "empty",
-            "empty", "empty", "empty")
+    val currentUser: User
+        get() = SugarRecord.first(User::class.java)?: initDefaultUser()
+
+    private fun initDefaultUser() : User{
+        val user = User("", "",
+            "", "", "")
         user.save()
         return user
     }
-    fun getPhotoFile(context: Context?): File?{
-        val externalFilesDir = context
-            ?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            ?: return null
-        return File(externalFilesDir, loadUser(context).generateAvatarPath())
-    }
+
+    val currentPhotoFile: File?
+        get(){
+            picturesDir?: return null
+            return File(picturesDir, currentUser.photoPath)
+        }
 }
