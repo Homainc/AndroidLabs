@@ -97,7 +97,7 @@ abstract class ProfileFragment : Fragment() {
         startActivityForResult(captureImage, REQUEST_CAMERA_PHOTO)
     }
 
-    protected fun isInputCorrect(): Boolean{
+    protected open fun isInputCorrect(): Boolean{
         if(nameTextEdit?.text.isNullOrEmpty()) {
             nameTextEdit?.error = resources.getString(R.string.name_required)
             return false

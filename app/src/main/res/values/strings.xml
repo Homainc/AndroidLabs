@@ -30,4 +30,7 @@
     <string name="text_log_in">Log In</string>
     <string name="text_sign_up">Sign Up</string>
     <string name="label_confirm_password">Confirm password</string>
+    <string name="log_in_error">Incorrect login or password</string>
+    <string name="passwords_must_match">Passwords must match</string>
+    <string name="log_out">Log Out</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.homa_inc.androidlabs.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.homa_inc.androidlabs.Activities.AuthActivity
+import com.homa_inc.androidlabs.Activities.MainActivity
 import com.homa_inc.androidlabs.R
 import com.homa_inc.androidlabs.Utils.PictureUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
@@ -31,15 +34,24 @@ class ProfileViewFragment : Fragment() {
         textPhone = v.findViewById(R.id.textViewPhoneNumber)
         textEmail = v.findViewById(R.id.textViewEmail)
         profileImageView = v.findViewById(R.id.profileImageView)
+        val logOutButton = v.findViewById<AppCompatButton>(R.id.log_out_button)
+        logOutButton.setOnClickListener { logOutClick() }
         updateUI()
         return v
     }
+
+    private fun logOutClick(){
+        UserUtil.instance.logOut()
+        startActivity(Intent(activity, AuthActivity::class.java))
+        activity?.finish()
+    }
+
     private fun updateUI(){
         val user = UserUtil.instance.currentUser
-        textName?.text = user.name
-        textSurname?.text = user.surname
-        textPhone?.text = user.phone
-        textEmail?.text = user.email
+        textName?.text = user?.name
+        textSurname?.text = user?.surname
+        textPhone?.text = user?.phone
+        textEmail?.text = user?.email
         updatePhotoView()
     }
     private fun updatePhotoView(){

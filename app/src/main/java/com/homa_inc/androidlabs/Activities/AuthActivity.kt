@@ -1,5 +1,6 @@
 package com.homa_inc.androidlabs.Activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.homa_inc.androidlabs.R
+import com.homa_inc.androidlabs.Utils.UserUtil
 
 class AuthActivity : AppCompatActivity() {
 
@@ -17,6 +19,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         navController = Navigation.findNavController(this@AuthActivity, R.id.nav_auth_host_fragment)
+        UserUtil.init(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

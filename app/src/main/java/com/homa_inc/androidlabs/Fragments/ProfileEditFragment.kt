@@ -25,16 +25,16 @@ class ProfileEditFragment : ProfileFragment() {
 
     private fun updateUI(){
         val user = UserUtil.instance.currentUser
-        nameTextEdit?.setText(user.name)
-        surnameTextEdit?.setText(user.surname)
-        phoneTextEdit?.setText(user.phone)
-        emailTextEdit?.setText(user.email)
+        nameTextEdit?.setText(user?.name)
+        surnameTextEdit?.setText(user?.surname)
+        phoneTextEdit?.setText(user?.phone)
+        emailTextEdit?.setText(user?.email)
         updatePhotoView()
     }
 
     private fun saveProfileClick(){
         if(isInputCorrect()) {
-            UserUtil.instance.currentUser.apply {
+            UserUtil.instance.currentUser?.apply {
                 name = nameTextEdit?.text.toString()
                 surname = surnameTextEdit?.text.toString()
                 email = emailTextEdit?.text.toString()

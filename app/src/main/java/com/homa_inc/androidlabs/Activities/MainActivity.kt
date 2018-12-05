@@ -25,7 +25,10 @@ class MainActivity : AppCompatActivity() {
         navController  = Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
         bottomNavigation?.setupWithNavController(navController as NavController)
         UserUtil.init(this)
-        startActivity(Intent(this, AuthActivity::class.java))
+        if(!UserUtil.instance.isAuthenticated) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

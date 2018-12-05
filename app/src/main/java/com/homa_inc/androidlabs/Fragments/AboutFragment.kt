@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.homa_inc.androidlabs.BuildConfig
 import com.homa_inc.androidlabs.R
 
@@ -43,7 +44,7 @@ class AboutFragment : Fragment() {
         textIMEI = v.findViewById(R.id.textView_IMEI) as AppCompatTextView
         textVersion = v.findViewById(R.id.textView_version) as AppCompatTextView
         textVersion?.text = BuildConfig.VERSION_NAME
-        navController = Navigation.findNavController(activity as AppCompatActivity, R.id.nav_auth_host_fragment)
+        navController = findNavController()
         showIMEI()
         (activity as AppCompatActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
