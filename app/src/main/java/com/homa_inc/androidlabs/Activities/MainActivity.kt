@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation?.setupWithNavController(navController as NavController)
         UserUtil.init(this)
         if(!UserUtil.instance.isAuthenticated) {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, AuthActivity::class.java))
             finish()
         }
     }
