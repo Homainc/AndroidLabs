@@ -15,4 +15,6 @@
                   android:label="ProfileViewFragment">
         </fragment><deepLink app:uri="sdapp://by.myapp/page/2"/>
     </navigation>
+    <fragment android:id="@+id/settingsFragment" android:name="com.homa_inc.androidlabs.Fragments.SettingsFragment"
+              android:label="SettingsFragment"><deepLink app:uri="sdapp://by.myapp/page/4"/></fragment>
 </navigation>
