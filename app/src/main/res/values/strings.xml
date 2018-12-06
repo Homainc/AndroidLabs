@@ -39,4 +39,5 @@
     <string name="text_apply">Apply</string>
     <string name="settings_saved">Settings saved</string>
     <string name="label_RSS_link">RSS Link</string>
+    <string name="menu_refresh">Refresh</string>
 </resources>

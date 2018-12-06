@@ -44,12 +44,10 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.home -> {
-                Log.i("checkTAG", "act_home")
                 navController?.popBackStack()
                 return true
             }
             R.id.homeAsUp -> {
-                Log.i("checkTAG", "act_homeup")
                 navController?.popBackStack()
                 return true
             }

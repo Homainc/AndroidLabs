@@ -6,9 +6,6 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +19,7 @@ import com.homa_inc.androidlabs.Utils.ThumbnailDownloader
 import java.lang.StringBuilder
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
+import android.view.*
 import android.widget.Toast
 import com.homa_inc.androidlabs.Utils.UserUtil
 
@@ -33,6 +31,11 @@ class HomeFragment : Fragment() {
 
     private var newsRecyclerView: RecyclerView? = null
     private var thumbnailDownloader: ThumbnailDownloader<FeedViewHolder>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
@@ -115,5 +118,19 @@ class HomeFragment : Fragment() {
     private fun showToast(text: String){
         val toast = Toast.makeText(context, text, Toast.LENGTH_SHORT)
         toast.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.home_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.appbar_item_refresh ->{
+                loadRSS()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
