@@ -2,35 +2,41 @@
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:cardView="http://schemas.android.com/apk/res-auto"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         cardView:cardCornerRadius="8dp"
         cardView:cardElevation="8dp">
     <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_margin="8dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"/>
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cardTextTitle"
                 android:textSize="18sp"
-                android:text="Title"
                 android:textStyle="bold"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cardTextDate"
                 android:textSize="12sp"
-                android:text="2017-05-23 12:30:00"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:textStyle="italic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cardTextContent"
                 android:textSize="14sp"
-                android:text="Content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:textStyle="normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

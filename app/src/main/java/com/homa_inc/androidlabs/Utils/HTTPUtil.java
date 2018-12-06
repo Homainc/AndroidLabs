@@ -1,5 +1,9 @@
 package com.homa_inc.androidlabs.Utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -32,4 +36,18 @@ public class HTTPUtil {
         }
         return stream;
     }
+
+    public Bitmap GetBitmapFromUrl(String url){
+        Bitmap img = null;
+        try {
+            InputStream in = new java.net.URL(url).openStream();
+            img = BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            Log.e("checkTAG", e.getMessage());
+            e.printStackTrace();
+        }
+        return img;
+    }
+
+
 }

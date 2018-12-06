@@ -2,15 +2,18 @@ package com.homa_inc.androidlabs.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.homa_inc.androidlabs.Interfaces.NewsItemClickListener
 import com.homa_inc.androidlabs.Models.RSSObject
 import com.homa_inc.androidlabs.R
+import com.homa_inc.androidlabs.Utils.ThumbnailDownloader
 
 class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
     View.OnClickListener, View.OnLongClickListener{
@@ -18,6 +21,7 @@ class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
     var textViewTitle: TextView
     var textViewPubDate: TextView
     var textViewContent: TextView
+    var imageView: ImageView
 
     private var newsItemClickListener: NewsItemClickListener? = null
 
@@ -25,6 +29,7 @@ class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
         textViewTitle = itemView.findViewById(R.id.cardTextTitle)
         textViewContent = itemView.findViewById(R.id.cardTextContent)
         textViewPubDate = itemView.findViewById(R.id.cardTextDate)
+        imageView = itemView.findViewById(R.id.imageView)
 
         itemView.setOnClickListener(this)
         itemView.setOnLongClickListener(this)
@@ -42,16 +47,25 @@ class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
         newsItemClickListener!!.onClick(v as View, adapterPosition, false)
         return true
     }
+
+    fun bindDrawable(drawable: Drawable){
+        imageView.setImageDrawable(drawable)
+    }
 }
 
-class FeedAdapter(private val rssObject: RSSObject, private val mContext: Context): RecyclerView.Adapter<FeedViewHolder>(){
+class FeedAdapter(
+    private val thumbnailDownloader: ThumbnailDownloader<FeedViewHolder>,
+    private val rssObject: RSSObject,
+    private val mContext: Context
+): RecyclerView.Adapter<FeedViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(mContext)
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         holder.textViewTitle.text = rssObject.items[position].title
         holder.textViewContent.text = rssObject.items[position].content
-        holder.textViewPubDate.text = rssObject.items[position].enclosure.link
+        holder.textViewPubDate.text = rssObject.items[position].pubDate
+        thumbnailDownloader.queueThumbnail(holder, rssObject.items[position].enclosure.link)
 
         holder.setItemClickListener(NewsItemClickListener { view, position, isLongClick -> run {
             if(!isLongClick){

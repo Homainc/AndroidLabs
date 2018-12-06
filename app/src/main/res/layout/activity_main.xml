@@ -20,5 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_alignParentBottom="true"
+            android:background="#FFF"
             app:menu="@menu/bottom_menu_items" />
 </RelativeLayout>
