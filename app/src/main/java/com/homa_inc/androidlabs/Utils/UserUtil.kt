@@ -3,6 +3,7 @@ package com.homa_inc.androidlabs.Utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Environment
+import android.text.BoringLayout
 import android.util.Log
 import com.homa_inc.androidlabs.Models.User
 import com.orm.SugarContext
@@ -18,6 +19,7 @@ class UserUtil private constructor() {
         private const val APP_PREFERENCES = "app_settings"
         private const val APP_PREFERENCES_EMAIL = "Id"
         private const val APP_PREFERENCES_PASSWORD = "Password"
+        private const val APP_PREFERENCES_RSS_LINK = "RSSLink"
         val instance: UserUtil by lazy { Holder.INSTANCE }
         var picturesDir: File? = null
         var settings: SharedPreferences? = null
@@ -84,8 +86,19 @@ class UserUtil private constructor() {
         settings?.edit()?.apply {
             remove(APP_PREFERENCES_PASSWORD)
             remove(APP_PREFERENCES_EMAIL)
+            if(settings?.contains(APP_PREFERENCES_RSS_LINK) as Boolean)
+                remove(APP_PREFERENCES_RSS_LINK)
             apply()
         }
         currentId = null
     }
+
+    fun setRSSLink(rssLink: String){
+        settings?.edit()?.apply{
+            putString(APP_PREFERENCES_RSS_LINK, rssLink)
+            apply()
+        }
+    }
+
+    fun getRSSLink(): String? = settings?.getString(APP_PREFERENCES_RSS_LINK, null)
 }
