@@ -33,8 +33,7 @@
                     android:id="@+id/textViewName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="Philipp"/>
+                    android:textSize="16sp"/>
             <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -46,8 +45,7 @@
                     android:id="@+id/textViewSurname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="Hamitsevich"/>
+                    android:textSize="16sp"/>
             <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,8 +57,7 @@
                     android:id="@+id/textViewPhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="+375336369973"/>
+                    android:textSize="16sp"/>
             <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,8 +69,7 @@
                     android:id="@+id/textViewEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="spritefok@gmail.com"/>
+                    android:textSize="16sp"/>
             <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/profile_edit_button"
                     android:layout_width="wrap_content"
