@@ -7,13 +7,15 @@ import android.util.Log
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import android.os.Message
+import com.homa_inc.androidlabs.Interfaces.HandlerCallBack
 import java.io.IOException
 
 
-class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThread("ThumbnailDownloader"){
+class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThread("ThumbnailDownloader"),
+    HandlerCallBack {
 
     companion object {
-        private const val MESSAGE_DOWNLOAD = 0
+        const val MESSAGE_DOWNLOAD = 0
     }
 
     private var mHasQuit : Boolean = false
@@ -46,26 +48,27 @@ class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThr
         }
     }
 
-    override fun onLooperPrepared() {
-        mRequestHandler = object : Handler() {
-            override fun handleMessage(msg: Message) {
-                if (msg.what == MESSAGE_DOWNLOAD) {
-                    val target = msg.obj as T
-                    handleRequest(target)
-                }
-            }
+    @Suppress("UNCHECKED_CAST")
+    override fun handleMessage(msg: Message) {
+        if (msg.what == MESSAGE_DOWNLOAD) {
+            val target = msg.obj as T
+            handleRequest(target)
         }
+    }
+
+    override fun onLooperPrepared() {
+        mRequestHandler = ImageDownloadingHandler(this)
     }
 
     private fun handleRequest(target: T) {
         try {
             val url = mRequestMap[target] ?: return
-            val bitmap = HTTPUtil().GetBitmapFromUrl(url)
+            val bitmap =  HttpUtil.bitmapFromUrl(url)
             mResponseHandler.post{
-                if(mRequestMap.get(target) != url || mHasQuit)
+                if(mRequestMap[target] != url || mHasQuit)
                     return@post
                 mRequestMap.remove(target)
-                mThumbnailDownloadListener?.onThumbnailDownloaded(target, bitmap)
+                mThumbnailDownloadListener?.onThumbnailDownloaded(target, bitmap as Bitmap)
             }
         } catch (ioe: IOException) {
             Log.e("checkTAG", "Error downloading image", ioe)

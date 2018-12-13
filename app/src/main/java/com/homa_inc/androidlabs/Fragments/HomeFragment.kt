@@ -14,14 +14,16 @@ import com.homa_inc.androidlabs.Adapter.FeedAdapter
 import com.homa_inc.androidlabs.Adapter.FeedViewHolder
 import com.homa_inc.androidlabs.Models.RSSObject
 import com.homa_inc.androidlabs.R
-import com.homa_inc.androidlabs.Utils.HTTPUtil
 import com.homa_inc.androidlabs.Utils.ThumbnailDownloader
 import java.lang.StringBuilder
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
 import android.view.*
 import android.widget.Toast
+import com.google.gson.stream.JsonReader
+import com.homa_inc.androidlabs.Utils.HttpUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
+import java.io.StringReader
 
 
 class HomeFragment : Fragment() {
@@ -77,23 +79,22 @@ class HomeFragment : Fragment() {
 
             override fun onPostExecute(result: String?) {
                 mDialog.dismiss()
-                val rssObject: RSSObject = Gson().fromJson<RSSObject>(result, RSSObject::class.java)
+                val reader = JsonReader(StringReader(result))
+                reader.isLenient = true
+                val rssObject: RSSObject = Gson().fromJson<RSSObject>(reader, RSSObject::class.java)
                 val adapter = FeedAdapter(thumbnailDownloader as ThumbnailDownloader<FeedViewHolder> , rssObject, activity?.baseContext as Context)
                 newsRecyclerView?.adapter = adapter
                 adapter.notifyDataSetChanged()
             }
 
             override fun doInBackground(vararg params: String?): String {
-                val result: String
-                val http = HTTPUtil()
-                result = http.GetHTTPDataHandler(params[0])
-                return  result
+                return HttpUtil.dataHandler(params[0]) as String
             }
         }
         if(UserUtil.instance.getRSSLink() == null){
             showToast(resources.getString(R.string.no_rss_link))
         }
-        else if(HTTPUtil.hasConnection(context)) {
+        else if(HttpUtil.hasConnection(context as Context)) {
             val urlGetData = StringBuilder(RSS_to_JSON_API)
             urlGetData.append(UserUtil.instance.getRSSLink())
             loadRSSAsync.execute(urlGetData.toString())

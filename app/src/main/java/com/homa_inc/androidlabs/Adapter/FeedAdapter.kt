@@ -66,14 +66,15 @@ class FeedAdapter(
         holder.textViewContent.text = rssObject.items[position].content
         holder.textViewPubDate.text = rssObject.items[position].pubDate
         thumbnailDownloader.queueThumbnail(holder, rssObject.items[position].enclosure.link)
-
-        holder.setItemClickListener(NewsItemClickListener { view, position, isLongClick -> run {
-            if(!isLongClick){
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(rssObject.items[position].link))
-                browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                mContext.startActivity(browserIntent)
+        holder.setItemClickListener(object : NewsItemClickListener {
+            override fun onClick(view: View, position: Int, isLongClick: Boolean) {
+                if(!isLongClick){
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(rssObject.items[position].link))
+                    browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    mContext.startActivity(browserIntent)
+                }
             }
-        }})
+        })
     }
 
     override fun getItemCount(): Int = rssObject.items.size
