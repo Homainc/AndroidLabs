@@ -31,6 +31,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.AuthActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
             <nav-graph android:value="@navigation/auth_graph" />
         </activity>
     </application>
