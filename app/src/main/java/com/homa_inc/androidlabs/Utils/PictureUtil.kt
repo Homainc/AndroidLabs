@@ -19,7 +19,7 @@ import java.lang.Exception
 
 class PictureUtil {
     companion object {
-        private val tempFileName = "IMG_TEMP.jpg"
+        private const val TEMP_FILE_NAME = "IMG_TEMP.jpg"
         private val debugTag = "AndroidLabs"
         private fun getScaledBitmap(path: String, destWidth: Int, destHeight: Int): Bitmap {
             var options = BitmapFactory.Options()
@@ -58,14 +58,14 @@ class PictureUtil {
             }
         }
         fun saveUserPicture(context: Context?, userFile: File?){
-            val bitmap = BitmapFactory.decodeFile(getTempPhotoFile(context)?.path)
-            savePicture(bitmap, userFile)
+            if(getTempPhotoFile(context)?.exists() as Boolean)
+                savePicture(BitmapFactory.decodeFile(getTempPhotoFile(context)?.path), userFile)
         }
         fun getTempPhotoFile(context: Context?): File?{
             val externalFilesDir = context
                 ?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 ?: return null
-            return File(externalFilesDir, tempFileName)
+            return File(externalFilesDir, TEMP_FILE_NAME)
         }
         fun fromUriInBitmap(activity: AppCompatActivity, uri: Uri?) : Bitmap{
             val parcelFileDescriptor = activity.contentResolver?.openFileDescriptor(uri as Uri, "r")

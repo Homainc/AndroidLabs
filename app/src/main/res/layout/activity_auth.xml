@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 tools:context=".Activities.AuthActivity">
-        <fragment
-                android:id="@+id/nav_auth_host_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_height="match_parent"
+        tools:context=".Activities.MainActivity"
+        android:id="@+id/frameLayout">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/auth_graph" />
-    </FrameLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+            <fragment
+                    android:id="@+id/nav_auth_host_fragment"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:defaultNavHost="true"
+                    app:navGraph="@navigation/auth_graph"/>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

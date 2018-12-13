@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
             android:allowBackup="true"
+            android:fullBackupContent="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,14 +24,18 @@
         <meta-data android:name="VERSION" android:value="1"/>
         <meta-data android:name="QUERY_LOG" android:value="true"/>
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.homa_inc.androidlabs"/>
-        <activity android:name=".Activities.MainActivity">
+        <activity
+                android:name=".Activities.MainActivity"
+                android:windowSoftInputMode="stateVisible|adjustResize">
             <nav-graph android:value="@navigation/main_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.AuthActivity">
+        <activity
+                android:name=".Activities.AuthActivity"
+                android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>

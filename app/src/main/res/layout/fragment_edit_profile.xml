@@ -1,109 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.appcompat.widget.LinearLayoutCompat
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="20dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_weight="1"
+            android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/editImageView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_profile"
+                android:scaleType="fitCenter"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/photoButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-            <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/editImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:src="@drawable/ic_profile"
-                    android:scaleType="fitCenter"/>
-            <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/photoButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_photo_add"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-        <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.5"
-                android:orientation="vertical">
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/nameTextEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:hint="@string/label_name"
-                        android:inputType="text"
-                        app:errorEnabled ="true"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/surnameTextEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:inputType="text"
-                        android:hint="@string/label_surname"
-                        app:errorEnabled ="true"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/phoneTextEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:inputType="phone"
-                        android:hint="@string/label_phone_number"
-                        app:errorEnabled ="true"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/emailTextEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:hint="@string/label_email"
-                        app:errorEnabled ="true"
-                        android:inputType="textWebEmailAddress"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/saveProfileButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/text_save_profile"
-                    style="@style/Widget.AppCompat.Button.Colored"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:src="@drawable/ic_photo_add"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
-</androidx.core.widget.NestedScrollView>
+    <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameTextEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="@string/label_name"
+                    android:inputType="text"
+                    app:errorEnabled ="true"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/surnameTextEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="text"
+                    android:hint="@string/label_surname"
+                    app:errorEnabled ="true"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/phoneTextEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:inputType="phone"
+                    android:hint="@string/label_phone_number"
+                    app:errorEnabled ="true"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailTextEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="@string/label_email"
+                    app:errorEnabled ="true"
+                    android:inputType="textWebEmailAddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveProfileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/text_save_profile"
+                style="@style/Widget.AppCompat.Button.Colored"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
