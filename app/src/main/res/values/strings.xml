@@ -35,7 +35,6 @@
     <string name="log_out">Log Out</string>
     <string name="menu_settings">Settings</string>
     <string name="no_internet">No internet connection</string>
-    <string name="no_rss_link">No rss link</string>
     <string name="text_apply">Apply</string>
     <string name="settings_saved">Settings saved</string>
     <string name="label_RSS_link">RSS Link</string>
@@ -44,4 +43,7 @@
     <string name="unsaved_changes_message">You have unsaved changes, do you want to save it?</string>
     <string name="text_save">Save</string>
     <string name="text_not_save">Close without saving</string>
+    <string name="rss_link_required">Need to set the rss link</string>
+    <string name="text_logged">You are logged in as </string>
+    <string name="text_connection_error">Connection error</string>
 </resources>

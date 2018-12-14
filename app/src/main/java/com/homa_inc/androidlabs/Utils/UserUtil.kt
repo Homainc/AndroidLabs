@@ -32,6 +32,7 @@ class UserUtil private constructor() {
 
     var currentId: Long? = null
     var tempPhotoIsActual = false
+    var isFirstLogIn = false
 
     val currentUser: User?
         get() {

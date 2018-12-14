@@ -17,7 +17,7 @@ class SettingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_settings, container, false)
-        rssLinkTextEdit = v.findViewById(R.id.rssLinkTextEdit)
+        rssLinkTextEdit = v.findViewById<TextInputEditText>(R.id.rssLinkTextEdit)
         rssLinkTextEdit?.setText(UserUtil.instance.getRSSLink())
         val applyButton = v.findViewById<AppCompatButton>(R.id.applyButton)
         applyButton.setOnClickListener{applyClick()}

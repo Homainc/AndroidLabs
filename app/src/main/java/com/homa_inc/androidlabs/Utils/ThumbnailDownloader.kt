@@ -24,7 +24,7 @@ class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThr
     private var mThumbnailDownloadListener: ThumbnailDownloadListener<T>? = null
 
     interface ThumbnailDownloadListener<T>{
-        fun onThumbnailDownloaded(target: T, thumbnail: Bitmap)
+        fun onThumbnailDownloaded(target: T, thumbnail: Bitmap?)
     }
 
     fun setThumbnailDownloadListener(listener: ThumbnailDownloadListener<T>){
@@ -68,7 +68,7 @@ class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThr
                 if(mRequestMap[target] != url || mHasQuit)
                     return@post
                 mRequestMap.remove(target)
-                mThumbnailDownloadListener?.onThumbnailDownloaded(target, bitmap as Bitmap)
+                mThumbnailDownloadListener?.onThumbnailDownloaded(target, bitmap)
             }
         } catch (ioe: IOException) {
             Log.e("checkTAG", "Error downloading image", ioe)

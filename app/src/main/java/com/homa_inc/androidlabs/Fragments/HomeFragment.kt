@@ -28,7 +28,10 @@ import java.io.StringReader
 
 class HomeFragment : Fragment() {
     companion object {
-        private const val RSS_to_JSON_API = "https://api.rss2json.com/v1/api.json?rss_url="
+        private const val RSS_API_KEY =
+            "&api_key=jfsknxx6un3fzrasevu6vzyeva8j2zkse3p2u52p&count=30"
+        private const val RSS_to_JSON_API =
+            "https://api.rss2json.com/v1/api.json?rss_url="
     }
 
     private var newsRecyclerView: RecyclerView? = null
@@ -44,8 +47,8 @@ class HomeFragment : Fragment() {
         newsRecyclerView = v.findViewById(R.id.newsRecyclerView)
         val linearLayoutManager = LinearLayoutManager(activity?.baseContext, RecyclerView.VERTICAL, false)
         newsRecyclerView?.layoutManager = linearLayoutManager
-        if(UserUtil.instance.getRSSLink() == null)
-            UserUtil.instance.setRSSLink("http://rss.nytimes.com/services/xml/rss/nyt/Science.xml")
+        if(UserUtil.instance.isFirstLogIn)
+            showToast(resources.getString(R.string.text_logged)+UserUtil.instance.currentUser?.email)
         loadRSS()
         return v
     }
@@ -57,10 +60,12 @@ class HomeFragment : Fragment() {
             object : ThumbnailDownloader.ThumbnailDownloadListener<FeedViewHolder> {
                 override fun onThumbnailDownloaded(
                     target: FeedViewHolder,
-                    thumbnail: Bitmap
+                    thumbnail: Bitmap?
                 ) {
-                    val drawable = BitmapDrawable(resources, thumbnail)
-                    target.bindDrawable(drawable)
+                    if(thumbnail != null) {
+                        val drawable = BitmapDrawable(resources, thumbnail)
+                        target.bindDrawable(drawable)
+                    }
                 }
             }
         )
@@ -80,6 +85,10 @@ class HomeFragment : Fragment() {
 
             override fun onPostExecute(result: String?) {
                 mDialog.dismiss()
+                if(result == null) {
+                    showToast(resources.getString(R.string.text_connection_error))
+                    return
+                }
                 val reader = JsonReader(StringReader(result))
                 reader.isLenient = true
                 val rssObject: RSSObject = Gson().fromJson<RSSObject>(reader, RSSObject::class.java)
@@ -88,16 +97,17 @@ class HomeFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
 
-            override fun doInBackground(vararg params: String?): String {
-                return HttpUtil.dataHandler(params[0]) as String
+            override fun doInBackground(vararg params: String?): String? {
+                return HttpUtil.dataHandler(params[0])
             }
         }
         if(UserUtil.instance.getRSSLink() == null){
-            showToast(resources.getString(R.string.no_rss_link))
+            showToast(resources.getString(R.string.rss_link_required))
         }
         else if(HttpUtil.hasConnection(context as Context)) {
             val urlGetData = StringBuilder(RSS_to_JSON_API)
             urlGetData.append(UserUtil.instance.getRSSLink())
+            urlGetData.append(RSS_API_KEY)
             loadRSSAsync.execute(urlGetData.toString())
             setupThumbnailDownloader()
         }
