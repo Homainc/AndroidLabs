@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.homa_inc.androidlabs.BuildConfig
+import com.homa_inc.androidlabs.Interfaces.ActionBarHomeButtonListener
 import com.homa_inc.androidlabs.R
 
 class AboutFragment : Fragment() {
@@ -32,6 +33,12 @@ class AboutFragment : Fragment() {
     private var textIMEI: AppCompatTextView? = null
     private var textVersion: AppCompatTextView? = null
     private var navController: NavController? = null
+    private var actionBarListener: ActionBarHomeButtonListener? = null
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        actionBarListener = context as ActionBarHomeButtonListener
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +53,7 @@ class AboutFragment : Fragment() {
         textVersion?.text = BuildConfig.VERSION_NAME
         navController = findNavController()
         showIMEI()
-        (activity as AppCompatActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeButtonEnabled(true)
-        }
+        actionBarListener?.showHomeButton()
         return v
     }
 
@@ -102,13 +106,16 @@ class AboutFragment : Fragment() {
 
     private fun showExploration(){
         val builder = AlertDialog.Builder(context as Context)
-        builder.setTitle(resources.getString(R.string.Exploration_title))
-            .setMessage(resources.getString(R.string.IMEI_exploration_string))
-            .setCancelable(false)
-            .setNeutralButton(resources.getString(R.string.OK_string)){ dialog, _ -> run {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
-                dialog.dismiss()
-            }}
+        builder.setTitle(resources.getString(R.string.Exploration_title)).apply {
+            setMessage(resources.getString(R.string.IMEI_exploration_string))
+            setCancelable(false)
+            setNeutralButton(resources.getString(R.string.OK_string)) { dialog, _ ->
+                run {
+                    requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
+                    dialog.dismiss()
+                }
+            }
+        }
         val exploration = builder.create()
         exploration.show()
     }
@@ -116,10 +123,7 @@ class AboutFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             android.R.id.home -> {
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                    setDisplayHomeAsUpEnabled(false)
-                    setHomeButtonEnabled(false)
-                }
+                actionBarListener?.hideHomeButton()
                 navController?.popBackStack()
                 return true
             }

@@ -8,10 +8,11 @@ import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.homa_inc.androidlabs.Interfaces.ActionBarHomeButtonListener
 import com.homa_inc.androidlabs.R
 import com.homa_inc.androidlabs.Utils.UserUtil
 
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity(), ActionBarHomeButtonListener {
 
     private var navController: NavController? = null
 
@@ -36,5 +37,19 @@ class AuthActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun hideHomeButton() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            setHomeButtonEnabled(false)
+        }
+    }
+
+    override fun showHomeButton() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
     }
 }
