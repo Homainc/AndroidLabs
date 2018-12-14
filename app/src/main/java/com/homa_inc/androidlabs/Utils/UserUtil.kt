@@ -3,8 +3,8 @@ package com.homa_inc.androidlabs.Utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Environment
-import android.text.BoringLayout
 import android.util.Log
+import com.homa_inc.androidlabs.Extensions.encrypt
 import com.homa_inc.androidlabs.Models.User
 import com.orm.SugarContext
 import com.orm.SugarRecord
@@ -65,7 +65,8 @@ class UserUtil private constructor() {
         val users = SugarRecord.find(User::class.java, "email = ?", email)
         if (users.isEmpty())
             return false
-        if (users.first().password == password.encrypt()) {
+        val user = users.first()
+        if (user.password == password.encrypt(user)) {
             settings?.edit()?.apply {
                 putString(APP_PREFERENCES_EMAIL, email)
                 putString(APP_PREFERENCES_PASSWORD, password)
@@ -81,9 +82,11 @@ class UserUtil private constructor() {
         val dbUsers = SugarRecord.find(User::class.java, "email = ?", user.email)
         if(!dbUsers.isEmpty())
             return false
-        user.password = user.password?.encrypt()
+        val rawPassword = user.password
         user.save()
-        return login(user.email as String, user.password?.decrypt() as String)
+        user.password = user.password?.encrypt(user)
+        user.save()
+        return login(user.email as String, rawPassword as String)
     }
 
     fun logOut() {

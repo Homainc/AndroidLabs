@@ -2,6 +2,7 @@ package com.homa_inc.androidlabs.Fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -52,6 +53,7 @@ class SignUpFragment: ProfileFragment() {
             user.password = passwordTextEdit?.text.toString()
             user.phone = phoneTextEdit?.text.toString()
             if(UserUtil.instance.register(user)){
+                Log.i("checkTAG","reged")
                 if(UserUtil.instance.tempPhotoIsActual)
                     PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
                 startActivity(Intent(activity, MainActivity::class.java))
