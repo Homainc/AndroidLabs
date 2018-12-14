@@ -72,19 +72,20 @@ android {
 }
 
 dependencies {
-    def nav_version = "1.0.0-alpha07"
+    def nav_version = "1.0.0-alpha08"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.jsoup:jsoup:1.8.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'com.github.satyan:sugar:1.4'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
     implementation 'com.google.code.gson:gson:2.8.5'
 }

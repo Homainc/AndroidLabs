@@ -44,7 +44,8 @@ class HomeFragment : Fragment() {
         newsRecyclerView = v.findViewById(R.id.newsRecyclerView)
         val linearLayoutManager = LinearLayoutManager(activity?.baseContext, RecyclerView.VERTICAL, false)
         newsRecyclerView?.layoutManager = linearLayoutManager
-        UserUtil.instance.setRSSLink("http://rss.nytimes.com/services/xml/rss/nyt/Science.xml")
+        if(UserUtil.instance.getRSSLink() == null)
+            UserUtil.instance.setRSSLink("http://rss.nytimes.com/services/xml/rss/nyt/Science.xml")
         loadRSS()
         return v
     }

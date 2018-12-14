@@ -26,7 +26,7 @@
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.homa_inc.androidlabs"/>
         <activity
                 android:name=".Activities.MainActivity"
-                android:windowSoftInputMode="stateVisible|adjustResize">
+                android:windowSoftInputMode="adjustResize">
             <nav-graph android:value="@navigation/main_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

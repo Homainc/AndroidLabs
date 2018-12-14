@@ -14,6 +14,7 @@ import com.homa_inc.androidlabs.Interfaces.NewsItemClickListener
 import com.homa_inc.androidlabs.Models.RSSObject
 import com.homa_inc.androidlabs.R
 import com.homa_inc.androidlabs.Utils.ThumbnailDownloader
+import org.jsoup.Jsoup
 
 class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
     View.OnClickListener, View.OnLongClickListener{
@@ -63,7 +64,8 @@ class FeedAdapter(
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         holder.textViewTitle.text = rssObject.items[position].title
-        holder.textViewContent.text = rssObject.items[position].content
+        val description = rssObject.items[position].description
+        holder.textViewContent.text = Jsoup.parse(description).text()
         holder.textViewPubDate.text = rssObject.items[position].pubDate
         thumbnailDownloader.queueThumbnail(holder, rssObject.items[position].enclosure.link)
         holder.setItemClickListener(object : NewsItemClickListener {
