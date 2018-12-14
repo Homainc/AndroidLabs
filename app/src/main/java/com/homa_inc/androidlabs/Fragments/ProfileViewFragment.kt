@@ -2,6 +2,7 @@ package com.homa_inc.androidlabs.Fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class ProfileViewFragment : Fragment() {
         profileImageView = v.findViewById(R.id.profileImageView)
         val logOutButton = v.findViewById<AppCompatButton>(R.id.log_out_button)
         logOutButton.setOnClickListener { logOutClick() }
+        UserUtil.instance.tempPhotoIsActual = false
         updateUI()
         return v
     }
@@ -55,13 +57,14 @@ class ProfileViewFragment : Fragment() {
         updatePhotoView()
     }
     private fun updatePhotoView(){
-        val photoFile = UserUtil.instance.currentPhotoFile
-        if(photoFile == null || !photoFile.exists()) {
+        val userPhotoFile = UserUtil.instance.currentPhotoFile
+        if(userPhotoFile == null || !userPhotoFile.exists()) {
             profileImageView?.setImageDrawable(null)
             return
         }
+        Log.i("checkTAG", userPhotoFile.path)
         //val bitmap = PictureUtil.getScaledBitmap(photoFile?.path as String, activity as AppCompatActivity)
-        val bitmap = PictureUtil.getRoundedBitMap(photoFile.path as String, activity as AppCompatActivity)
+        val bitmap = PictureUtil.getRoundedBitMap(userPhotoFile.path as String, activity as AppCompatActivity)
         profileImageView?.setImageDrawable(bitmap)
     }
 }

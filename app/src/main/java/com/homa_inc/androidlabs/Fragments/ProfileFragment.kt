@@ -132,11 +132,13 @@ abstract class ProfileFragment : Fragment() {
         when(requestCode){
             REQUEST_CAMERA_PHOTO -> {
                 photoFile = PictureUtil.getTempPhotoFile(context)
+                UserUtil.instance.tempPhotoIsActual = true
                 updatePhotoView()
             }
             REQUEST_GALLERY_PHOTO -> {
                 photoFile = PictureUtil.getTempPhotoFile(context)
                 PictureUtil.savePicture(PictureUtil.fromUriInBitmap(activity as AppCompatActivity, data?.data), photoFile)
+                UserUtil.instance.tempPhotoIsActual = true
                 updatePhotoView()
             }
         }

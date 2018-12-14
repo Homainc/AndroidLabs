@@ -31,6 +31,7 @@ class UserUtil private constructor() {
     }
 
     var currentId: Long? = null
+    var tempPhotoIsActual = false
 
     val currentUser: User?
         get() {
@@ -40,9 +41,12 @@ class UserUtil private constructor() {
 
     val currentPhotoFile: File?
         get() {
-            picturesDir?: return null
-            currentUser?: return null
-            return File(picturesDir, currentUser?.photoPath)
+            var filename = currentUser?.photoPath
+            if(tempPhotoIsActual)
+               filename = PictureUtil.TEMP_FILE_NAME
+            picturesDir ?: return null
+            currentUser ?: return null
+            return File(picturesDir, filename)
         }
 
     val isAuthenticated: Boolean

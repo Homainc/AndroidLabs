@@ -52,7 +52,8 @@ class SignUpFragment: ProfileFragment() {
             user.password = passwordTextEdit?.text.toString()
             user.phone = phoneTextEdit?.text.toString()
             if(UserUtil.instance.register(user)){
-                PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
+                if(UserUtil.instance.tempPhotoIsActual)
+                    PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity?.finish()
             }

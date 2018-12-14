@@ -41,8 +41,10 @@ class ProfileEditFragment : ProfileFragment() {
                 phone = phoneTextEdit?.text.toString()
                 save()
             }
-            if (photoFile?.path != UserUtil.instance.currentPhotoFile?.path)
+            if (photoFile?.path != UserUtil.instance.currentPhotoFile?.path) {
                 PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
+                UserUtil.instance.tempPhotoIsActual = false
+            }
             findNavController().navigate(R.id.profileViewFragment)
         }
     }
