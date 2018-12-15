@@ -74,6 +74,7 @@ class UserUtil private constructor() {
                 currentId = users.first().id
                 apply()
             }
+            isFirstLogIn = true
             return true
         }
         return false

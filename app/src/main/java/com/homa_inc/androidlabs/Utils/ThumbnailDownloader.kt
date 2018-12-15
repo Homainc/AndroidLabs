@@ -41,8 +41,7 @@ class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThr
             mRequestMap.remove(target)
         }
         else{
-            @Suppress("ReplacePutWithAssignment")
-            mRequestMap.put(target, url)
+            mRequestMap[target] = url
             mRequestHandler?.obtainMessage(MESSAGE_DOWNLOAD, target)
                 ?.sendToTarget()
         }

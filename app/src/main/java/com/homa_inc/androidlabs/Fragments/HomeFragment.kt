@@ -20,6 +20,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
 import android.view.*
 import android.widget.Toast
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.gson.stream.JsonReader
 import com.homa_inc.androidlabs.Utils.HttpUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
@@ -35,28 +36,33 @@ class HomeFragment : Fragment() {
     }
 
     private var newsRecyclerView: RecyclerView? = null
-    private var thumbnailDownloader: ThumbnailDownloader<FeedViewHolder>? = null
+    private var swipeRefresh: SwipeRefreshLayout? = null
+    private lateinit var thumbnailDownloader: ThumbnailDownloader<FeedViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        thumbnailDownloader = ThumbnailDownloader(Handler())
+        setupThumbnailDownloader()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         newsRecyclerView = v.findViewById(R.id.newsRecyclerView)
         val linearLayoutManager = LinearLayoutManager(activity?.baseContext, RecyclerView.VERTICAL, false)
+        swipeRefresh = v.findViewById(R.id.swipeRefresh)
+        swipeRefresh?.setOnRefreshListener { loadRSS() }
         newsRecyclerView?.layoutManager = linearLayoutManager
-        if(UserUtil.instance.isFirstLogIn)
-            showToast(resources.getString(R.string.text_logged)+UserUtil.instance.currentUser?.email)
+        if(UserUtil.instance.isFirstLogIn) {
+            UserUtil.instance.isFirstLogIn = false
+            showToast(resources.getString(R.string.text_logged) + UserUtil.instance.currentUser?.email)
+        }
         loadRSS()
         return v
     }
 
     private fun setupThumbnailDownloader(){
-        val responseHandler = Handler()
-        thumbnailDownloader = ThumbnailDownloader(responseHandler)
-        thumbnailDownloader?.setThumbnailDownloadListener(
+        thumbnailDownloader.setThumbnailDownloadListener(
             object : ThumbnailDownloader.ThumbnailDownloadListener<FeedViewHolder> {
                 override fun onThumbnailDownloaded(
                     target: FeedViewHolder,
@@ -69,22 +75,19 @@ class HomeFragment : Fragment() {
                 }
             }
         )
-        thumbnailDownloader?.start()
-        thumbnailDownloader?.looper
+        thumbnailDownloader.start()
+        thumbnailDownloader.looper
     }
 
     private fun loadRSS(){
         val loadRSSAsync = @SuppressLint("StaticFieldLeak")
         object:AsyncTask<String, String, String>(){
-            internal var mDialog = ProgressDialog(activity)
-
             override fun onPreExecute() {
-                mDialog.setMessage("Please wait...")
-                mDialog.show()
+                swipeRefresh?.isRefreshing = true
             }
 
             override fun onPostExecute(result: String?) {
-                mDialog.dismiss()
+                swipeRefresh?.isRefreshing = false
                 if(result == null) {
                     showToast(resources.getString(R.string.text_connection_error))
                     return
@@ -92,7 +95,7 @@ class HomeFragment : Fragment() {
                 val reader = JsonReader(StringReader(result))
                 reader.isLenient = true
                 val rssObject: RSSObject = Gson().fromJson<RSSObject>(reader, RSSObject::class.java)
-                val adapter = FeedAdapter(thumbnailDownloader as ThumbnailDownloader<FeedViewHolder> , rssObject, activity?.baseContext as Context)
+                val adapter = FeedAdapter(thumbnailDownloader, rssObject, activity?.baseContext as Context)
                 newsRecyclerView?.adapter = adapter
                 adapter.notifyDataSetChanged()
             }
@@ -109,7 +112,6 @@ class HomeFragment : Fragment() {
             urlGetData.append(UserUtil.instance.getRSSLink())
             urlGetData.append(RSS_API_KEY)
             loadRSSAsync.execute(urlGetData.toString())
-            setupThumbnailDownloader()
         }
         else {
             showToast(resources.getString(R.string.no_internet))
@@ -118,12 +120,12 @@ class HomeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        thumbnailDownloader?.quit()
+        thumbnailDownloader.quit()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        thumbnailDownloader?.clearQueue()
+        thumbnailDownloader.clearQueue()
     }
 
     private fun showToast(text: String){

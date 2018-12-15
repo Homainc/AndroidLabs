@@ -38,7 +38,7 @@
     <string name="text_apply">Apply</string>
     <string name="settings_saved">Settings saved</string>
     <string name="label_RSS_link">RSS Link</string>
-    <string name="menu_refresh">Refresh</string>
+    <string name="menu_refresh">Refresh news</string>
     <string name="text_warning">Warning</string>
     <string name="unsaved_changes_message">You have unsaved changes, do you want to save it?</string>
     <string name="text_save">Save</string>

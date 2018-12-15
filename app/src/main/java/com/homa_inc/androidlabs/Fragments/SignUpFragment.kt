@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.widget.TextViewCompat
 import androidx.navigation.Navigation
 import com.google.android.material.textfield.TextInputEditText
 import com.homa_inc.androidlabs.Activities.MainActivity
@@ -24,7 +25,7 @@ class SignUpFragment: ProfileFragment() {
 
     private var passwordTextEdit: TextInputEditText? = null
     private var confirmPasswordTextEdit: TextInputEditText? = null
-    private var errorText: AppCompatImageView? = null
+    private var errorText: TextViewCompat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class SignUpFragment: ProfileFragment() {
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
         }
+
         passwordTextEdit = v?.findViewById(R.id.passwordTextEdit)
         confirmPasswordTextEdit = v?.findViewById(R.id.passwordConfirmTextEdit)
         val signUpButton = v?.findViewById<AppCompatButton>(R.id.signUpButton)
@@ -53,9 +55,10 @@ class SignUpFragment: ProfileFragment() {
             user.password = passwordTextEdit?.text.toString()
             user.phone = phoneTextEdit?.text.toString()
             if(UserUtil.instance.register(user)){
-                Log.i("checkTAG","reged")
-                if(UserUtil.instance.tempPhotoIsActual)
+                if(UserUtil.instance.tempPhotoIsActual) {
+                    UserUtil.instance.tempPhotoIsActual = false
                     PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
+                }
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity?.finish()
             }

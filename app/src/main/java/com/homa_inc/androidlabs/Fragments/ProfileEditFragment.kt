@@ -71,9 +71,9 @@ class ProfileEditFragment : ProfileFragment() {
                 phone = phoneTextEdit?.text.toString()
                 save()
             }
+            UserUtil.instance.tempPhotoIsActual = false
             if (photoFile?.path != UserUtil.instance.currentPhotoFile?.path) {
                 PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
-                UserUtil.instance.tempPhotoIsActual = false
             }
             profileEditListener?.onProfileEditFragmentHided()
             activityWithBackPressedListener?.setOnBackPressedListener(null)

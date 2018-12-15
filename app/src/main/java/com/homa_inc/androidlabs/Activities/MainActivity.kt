@@ -25,13 +25,11 @@ class MainActivity : AppCompatActivity(), ActivityWithBackPressedListener,
 
     private var bottomNavigation: BottomNavigationView? = null
     private var navController: NavController? = null
-    private var scrollWrapper: NestedScrollView? = null
     private var backPressedListener: OnBackPressedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        scrollWrapper = findViewById(R.id.scrollWrapper)
         bottomNavigation = findViewById(R.id.bottom_navigation)
         navController  = Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
         bottomNavigation?.setupWithNavController(navController as NavController)
@@ -67,25 +65,11 @@ class MainActivity : AppCompatActivity(), ActivityWithBackPressedListener,
     }
 
     override fun onProfileEditFragmentHided() {
-        val scale = resources.displayMetrics.density
-        val bottomPaddingInPx =  Math.round(56 * scale + 0.5f)
         bottomNavigation?.visibility = View.VISIBLE
-        scrollWrapper?.setPadding(
-            scrollWrapper?.paddingLeft as Int,
-            scrollWrapper?.paddingTop as Int,
-            scrollWrapper?.paddingRight as Int,
-            bottomPaddingInPx
-        )
     }
 
     override fun onProfileEditFragmentShowed() {
         bottomNavigation?.visibility = View.GONE
-        scrollWrapper?.setPadding(
-            scrollWrapper?.paddingLeft as Int,
-            scrollWrapper?.paddingTop as Int,
-            scrollWrapper?.paddingRight as Int,
-            0
-        )
     }
 
     override fun hideHomeButton() {
