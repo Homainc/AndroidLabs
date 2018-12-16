@@ -21,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.homa_inc.androidlabs.Extensions.hideKeyboard
+import com.homa_inc.androidlabs.Interfaces.NavigatorToWebView
 import com.homa_inc.androidlabs.Interfaces.NewsReceiver
 import com.homa_inc.androidlabs.Tasks.NewsDownloadingTask
 import com.homa_inc.androidlabs.Utils.HttpUtil
@@ -30,7 +31,7 @@ import es.dmoral.toasty.Toasty
 import java.text.MessageFormat
 
 
-class HomeFragment : Fragment(), NewsReceiver {
+class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
 
     companion object {
         private const val RSS_API_KEY =
@@ -141,15 +142,24 @@ class HomeFragment : Fragment(), NewsReceiver {
     override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
         swipeRefresh?.isRefreshing = false
         if(rssObject == null) {
-            Toasty.error(context as Context, R.string.text_connection_error,
+            Toasty.error(context!!, R.string.text_connection_error,
                 Toast.LENGTH_SHORT, true).show()
             return
         }
         if(!cached){
             NewsCachingUtil.saveToCache(rssObject)
         }
-        val adapter = FeedAdapter(thumbnailDownloader, rssObject, activity?.baseContext as Context)
+        val adapter = FeedAdapter(thumbnailDownloader, rssObject,
+            activity?.baseContext!!, this@HomeFragment)
         newsRecyclerView?.adapter = adapter
         adapter.notifyDataSetChanged()
+    }
+
+    override fun openWebView(link: String) {
+        if(HttpUtil.hasConnection(context!!)){
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToWebViewActivity(link))
+            return
+        }
+        Toasty.error(context!!, R.string.no_internet, Toast.LENGTH_SHORT, true).show()
     }
 }

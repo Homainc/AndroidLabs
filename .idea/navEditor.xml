@@ -71,8 +71,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-146" />
-                            <option name="y" value="-23" />
+                            <option name="x" value="-168" />
+                            <option name="y" value="-120" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -83,8 +83,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-325" />
-                            <option name="y" value="-22" />
+                            <option name="x" value="-373" />
+                            <option name="y" value="57" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -137,6 +137,18 @@
                           <Point>
                             <option name="x" value="261" />
                             <option name="y" value="-15" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="webViewActivity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="51" />
+                            <option name="y" value="103" />
                           </Point>
                         </option>
                       </LayoutPositions>

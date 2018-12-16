@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.homa_inc.androidlabs.Interfaces.NavigatorToWebView
 import com.homa_inc.androidlabs.Interfaces.NewsItemClickListener
 import com.homa_inc.androidlabs.Models.RSSObject
 import com.homa_inc.androidlabs.R
@@ -57,7 +58,8 @@ class FeedViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
 class FeedAdapter(
     private val thumbnailDownloader: ThumbnailDownloader<FeedViewHolder>,
     private val rssObject: RSSObject,
-    private val mContext: Context
+    private val mContext: Context,
+    private val navigator: NavigatorToWebView
 ): RecyclerView.Adapter<FeedViewHolder>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(mContext)
@@ -71,9 +73,7 @@ class FeedAdapter(
         holder.setItemClickListener(object : NewsItemClickListener {
             override fun onClick(view: View, position: Int, isLongClick: Boolean) {
                 if(!isLongClick){
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(rssObject.items[position].link))
-                    browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    mContext.startActivity(browserIntent)
+                    navigator.openWebView(rssObject.items[position].link)
                 }
             }
         })

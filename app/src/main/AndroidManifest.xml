@@ -41,5 +41,8 @@
             </intent-filter>
             <nav-graph android:value="@navigation/auth_graph" />
         </activity>
+        <activity android:name=".Activities.WebViewActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
     </application>
 </manifest>

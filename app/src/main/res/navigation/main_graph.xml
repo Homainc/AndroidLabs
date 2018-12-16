@@ -6,7 +6,9 @@
     <fragment android:id="@+id/aboutFragment" android:name="com.homa_inc.androidlabs.Fragments.AboutFragment"
               android:label="AboutFragment"><deepLink app:uri="sdapp://by.myapp/page/3"/></fragment>
     <fragment android:id="@+id/homeFragment" android:name="com.homa_inc.androidlabs.Fragments.HomeFragment"
-              android:label="HomeFragment"><deepLink app:uri="sdapp://by.myapp/page/1"/></fragment>
+              android:label="HomeFragment"><deepLink app:uri="sdapp://by.myapp/page/1"/>
+        <action android:id="@+id/action_homeFragment_to_webViewActivity" app:destination="@id/webViewActivity"/>
+    </fragment>
     <navigation android:id="@+id/profileNavigation" app:startDestination="@id/profileViewFragment">
         <fragment android:id="@+id/profileEditFragment" android:name="com.homa_inc.androidlabs.Fragments.ProfileEditFragment"
                   android:label="ProfileEditFragment">
@@ -17,4 +19,8 @@
     </navigation>
     <fragment android:id="@+id/settingsFragment" android:name="com.homa_inc.androidlabs.Fragments.SettingsFragment"
               android:label="SettingsFragment"><deepLink app:uri="sdapp://by.myapp/page/4"/></fragment>
+    <activity android:id="@+id/webViewActivity" android:name="com.homa_inc.androidlabs.Activities.WebViewActivity"
+              android:label="WebViewActivity">
+        <argument android:name="url" app:argType="string"/>
+    </activity>
 </navigation>
