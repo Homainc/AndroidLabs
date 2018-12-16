@@ -146,7 +146,7 @@ abstract class ProfileFragment : Fragment() {
 
     protected fun updatePhotoView(){
         if(photoFile == null || photoFile?.exists() == false) {
-            editImageView?.setImageDrawable(null)
+            editImageView?.setImageResource(R.drawable.blank_profile)
             return
         }
         //val bitmap = PictureUtil.getScaledBitmap(photoFile?.path as String, activity as AppCompatActivity)

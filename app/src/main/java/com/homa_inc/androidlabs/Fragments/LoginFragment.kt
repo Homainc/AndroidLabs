@@ -33,7 +33,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun logInClick() {
-        if (UserUtil.instance.login(emailTextEdit?.text.toString(), passwordTextEdit?.text.toString())) {
+        if (UserUtil.instance.login(emailTextEdit?.text.toString(), passwordTextEdit?.text.toString(), true)) {
             startActivity(Intent(activity, MainActivity::class.java))
             activity?.finish()
         } else {

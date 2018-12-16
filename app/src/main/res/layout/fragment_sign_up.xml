@@ -15,7 +15,7 @@
                 android:id="@+id/editImageView"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_profile"
+                android:src="@drawable/blank_profile"
                 android:scaleType="fitCenter"/>
         <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/photoButton"

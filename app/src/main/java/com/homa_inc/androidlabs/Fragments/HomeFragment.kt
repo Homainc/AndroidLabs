@@ -1,7 +1,6 @@
 package com.homa_inc.androidlabs.Fragments
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
@@ -25,6 +24,7 @@ import com.google.gson.stream.JsonReader
 import com.homa_inc.androidlabs.Utils.HttpUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
 import java.io.StringReader
+import java.text.MessageFormat
 
 
 class HomeFragment : Fragment() {
@@ -55,7 +55,8 @@ class HomeFragment : Fragment() {
         newsRecyclerView?.layoutManager = linearLayoutManager
         if(UserUtil.instance.isFirstLogIn) {
             UserUtil.instance.isFirstLogIn = false
-            showToast(resources.getString(R.string.text_logged) + UserUtil.instance.currentUser?.email)
+            showToast(MessageFormat.format(resources.getString(R.string.text_logged),
+                UserUtil.instance.currentUser?.email))
         }
         loadRSS()
         return v

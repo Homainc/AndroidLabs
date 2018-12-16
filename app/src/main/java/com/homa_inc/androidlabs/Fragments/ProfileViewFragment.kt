@@ -59,7 +59,7 @@ class ProfileViewFragment : Fragment() {
     private fun updatePhotoView(){
         val userPhotoFile = UserUtil.instance.currentPhotoFile
         if(userPhotoFile == null || !userPhotoFile.exists()) {
-            profileImageView?.setImageDrawable(null)
+            profileImageView?.setImageResource(R.drawable.blank_profile)
             return
         }
         Log.i("checkTAG", userPhotoFile.path)

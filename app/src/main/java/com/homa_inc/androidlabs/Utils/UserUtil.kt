@@ -57,12 +57,12 @@ class UserUtil private constructor() {
             ) {
                 val email = settings?.getString(APP_PREFERENCES_EMAIL, "not_email")
                 val password = settings?.getString(APP_PREFERENCES_PASSWORD, "")
-                return login(email as String, password as String)
+                return login(email as String, password as String, isFirstLogIn)
             }
             return false
         }
 
-    fun login(email: String, password: String): Boolean {
+    fun login(email: String, password: String, firstLogIn: Boolean = false): Boolean {
         val users = SugarRecord.find(User::class.java, "email = ?", email)
         if (users.isEmpty())
             return false
@@ -74,7 +74,7 @@ class UserUtil private constructor() {
                 currentId = users.first().id
                 apply()
             }
-            isFirstLogIn = true
+            isFirstLogIn = firstLogIn
             return true
         }
         return false
@@ -88,7 +88,7 @@ class UserUtil private constructor() {
         user.save()
         user.password = user.password?.encrypt(user)
         user.save()
-        return login(user.email as String, rawPassword as String)
+        return login(user.email as String, rawPassword as String, true)
     }
 
     fun logOut() {

@@ -44,6 +44,6 @@
     <string name="text_save">Save</string>
     <string name="text_not_save">Close without saving</string>
     <string name="rss_link_required">Need to set the rss link</string>
-    <string name="text_logged">You are logged in as </string>
+    <string name="text_logged">You are logged in as {0}</string>
     <string name="text_connection_error">Connection error</string>
 </resources>
