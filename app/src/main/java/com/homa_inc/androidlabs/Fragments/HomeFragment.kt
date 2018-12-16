@@ -21,13 +21,16 @@ import android.view.*
 import android.widget.Toast
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.gson.stream.JsonReader
+import com.homa_inc.androidlabs.Interfaces.NewsReceiver
+import com.homa_inc.androidlabs.Tasks.NewsDownloadingTask
 import com.homa_inc.androidlabs.Utils.HttpUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
 import java.io.StringReader
 import java.text.MessageFormat
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), NewsReceiver {
+
     companion object {
         private const val RSS_API_KEY =
             "&api_key=jfsknxx6un3fzrasevu6vzyeva8j2zkse3p2u52p&count=30"
@@ -81,42 +84,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadRSS(){
-        val loadRSSAsync = @SuppressLint("StaticFieldLeak")
-        object:AsyncTask<String, String, String>(){
-            override fun onPreExecute() {
-                swipeRefresh?.isRefreshing = true
-            }
-
-            override fun onPostExecute(result: String?) {
-                swipeRefresh?.isRefreshing = false
-                if(result == null) {
-                    showToast(resources.getString(R.string.text_connection_error))
-                    return
-                }
-                val reader = JsonReader(StringReader(result))
-                reader.isLenient = true
-                val rssObject: RSSObject = Gson().fromJson<RSSObject>(reader, RSSObject::class.java)
-                val adapter = FeedAdapter(thumbnailDownloader, rssObject, activity?.baseContext as Context)
-                newsRecyclerView?.adapter = adapter
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun doInBackground(vararg params: String?): String? {
-                return HttpUtil.dataHandler(params[0])
-            }
-        }
         if(UserUtil.instance.getRSSLink() == null){
             showToast(resources.getString(R.string.rss_link_required))
+            return
         }
         else if(HttpUtil.hasConnection(context as Context)) {
             val urlGetData = StringBuilder(RSS_to_JSON_API)
             urlGetData.append(UserUtil.instance.getRSSLink())
             urlGetData.append(RSS_API_KEY)
+            val loadRSSAsync = NewsDownloadingTask(this@HomeFragment)
             loadRSSAsync.execute(urlGetData.toString())
+            return
         }
-        else {
-            showToast(resources.getString(R.string.no_internet))
-        }
+        showToast(resources.getString(R.string.no_internet))
     }
 
     override fun onDestroy() {
@@ -146,5 +126,20 @@ class HomeFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onNewsLoadPreExecuted() {
+        swipeRefresh?.isRefreshing = true
+    }
+
+    override fun onNewsLoadPostExecuted(rssObject: RSSObject?) {
+        swipeRefresh?.isRefreshing = false
+        if(rssObject == null) {
+            showToast(resources.getString(R.string.text_connection_error))
+            return
+        }
+        val adapter = FeedAdapter(thumbnailDownloader, rssObject, activity?.baseContext as Context)
+        newsRecyclerView?.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 }
