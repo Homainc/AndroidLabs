@@ -46,4 +46,7 @@
     <string name="rss_link_required">Need to set the rss link</string>
     <string name="text_logged">You are logged in as {0}</string>
     <string name="text_connection_error">Connection error</string>
+    <string name="error_email_already_registered">User with this email already registered</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="error_incorrect_input">Incorrect data entered</string>
 </resources>

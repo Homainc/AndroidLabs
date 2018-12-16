@@ -1,5 +1,6 @@
 package com.homa_inc.androidlabs.Fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
@@ -18,6 +20,7 @@ import com.homa_inc.androidlabs.Models.User
 import com.homa_inc.androidlabs.R
 import com.homa_inc.androidlabs.Utils.PictureUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
+import es.dmoral.toasty.Toasty
 
 class SignUpFragment: ProfileFragment() {
 
@@ -61,8 +64,13 @@ class SignUpFragment: ProfileFragment() {
                 }
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity?.finish()
+                return
             }
+            Toasty.error(context as Context,
+                R.string.error_email_already_registered,
+                Toast.LENGTH_SHORT, true).show()
         }
+        Toasty.error(context as Context, R.string.error_incorrect_input, Toast.LENGTH_SHORT, true).show()
     }
 
     override fun isInputCorrect(): Boolean{

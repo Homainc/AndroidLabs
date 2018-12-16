@@ -17,13 +17,16 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
 import android.view.*
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.homa_inc.androidlabs.Extensions.hideKeyboard
 import com.homa_inc.androidlabs.Interfaces.NewsReceiver
 import com.homa_inc.androidlabs.Tasks.NewsDownloadingTask
 import com.homa_inc.androidlabs.Utils.HttpUtil
 import com.homa_inc.androidlabs.Utils.NewsCachingUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
+import es.dmoral.toasty.Toasty
 import java.text.MessageFormat
 
 
@@ -55,11 +58,12 @@ class HomeFragment : Fragment(), NewsReceiver {
         newsRecyclerView?.layoutManager = getLayoutManager()
         if(UserUtil.instance.isFirstLogIn) {
             UserUtil.instance.isFirstLogIn = false
-            showToast(MessageFormat.format(resources.getString(R.string.text_logged),
-                UserUtil.instance.currentUser?.email))
+            val msg = MessageFormat.format(resources.getString(R.string.text_logged),
+                UserUtil.instance.currentUser?.email)
+            Toasty.info(context as Context, msg, Toast.LENGTH_SHORT, true).show()
         }
-        //loadRSS()
-        onNewsLoadPostExecuted(NewsCachingUtil.loadFromCache(), true)
+        loadRSS()
+        //onNewsLoadPostExecuted(NewsCachingUtil.loadFromCache(), true)
         return v
     }
 
@@ -88,8 +92,9 @@ class HomeFragment : Fragment(), NewsReceiver {
     }
 
     private fun loadRSS(){
-        if(UserUtil.instance.getRSSLink() == null){
-            showToast(resources.getString(R.string.rss_link_required))
+        if(UserUtil.instance.getRSSLink().isNullOrEmpty()){
+            Toasty.warning(context as Context, R.string.rss_link_required, Toast.LENGTH_SHORT, true).show()
+            findNavController().navigate(R.id.settingsFragment)
             return
         }
         if(HttpUtil.hasConnection(context as Context)) {
@@ -102,7 +107,7 @@ class HomeFragment : Fragment(), NewsReceiver {
             return
         }
         onNewsLoadPostExecuted(NewsCachingUtil.loadFromCache(), true)
-        showToast(resources.getString(R.string.no_internet))
+        Toasty.warning(context as Context, R.string.no_internet, Toast.LENGTH_SHORT, true).show()
     }
 
     override fun onDestroy() {
@@ -113,11 +118,6 @@ class HomeFragment : Fragment(), NewsReceiver {
     override fun onDestroyView() {
         super.onDestroyView()
         thumbnailDownloader.clearQueue()
-    }
-
-    private fun showToast(text: String){
-        val toast = Toast.makeText(context, text, Toast.LENGTH_SHORT)
-        toast.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -141,7 +141,8 @@ class HomeFragment : Fragment(), NewsReceiver {
     override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
         swipeRefresh?.isRefreshing = false
         if(rssObject == null) {
-            showToast(resources.getString(R.string.text_connection_error))
+            Toasty.error(context as Context, R.string.text_connection_error,
+                Toast.LENGTH_SHORT, true).show()
             return
         }
         if(!cached){
