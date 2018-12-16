@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.homa_inc.androidlabs.Interfaces.NewsReceiver
 import com.homa_inc.androidlabs.Tasks.NewsDownloadingTask
 import com.homa_inc.androidlabs.Utils.HttpUtil
+import com.homa_inc.androidlabs.Utils.NewsCachingUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
 import java.text.MessageFormat
 
@@ -57,7 +58,8 @@ class HomeFragment : Fragment(), NewsReceiver {
             showToast(MessageFormat.format(resources.getString(R.string.text_logged),
                 UserUtil.instance.currentUser?.email))
         }
-        loadRSS()
+        //loadRSS()
+        onNewsLoadPostExecuted(NewsCachingUtil.loadFromCache(), true)
         return v
     }
 
@@ -90,7 +92,8 @@ class HomeFragment : Fragment(), NewsReceiver {
             showToast(resources.getString(R.string.rss_link_required))
             return
         }
-        else if(HttpUtil.hasConnection(context as Context)) {
+        if(HttpUtil.hasConnection(context as Context)) {
+            thumbnailDownloader.clearQueue()
             val urlGetData = StringBuilder(RSS_to_JSON_API)
             urlGetData.append(UserUtil.instance.getRSSLink())
             urlGetData.append(RSS_API_KEY)
@@ -98,6 +101,7 @@ class HomeFragment : Fragment(), NewsReceiver {
             loadRSSAsync.execute(urlGetData.toString())
             return
         }
+        onNewsLoadPostExecuted(NewsCachingUtil.loadFromCache(), true)
         showToast(resources.getString(R.string.no_internet))
     }
 
@@ -134,11 +138,14 @@ class HomeFragment : Fragment(), NewsReceiver {
         swipeRefresh?.isRefreshing = true
     }
 
-    override fun onNewsLoadPostExecuted(rssObject: RSSObject?) {
+    override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
         swipeRefresh?.isRefreshing = false
         if(rssObject == null) {
             showToast(resources.getString(R.string.text_connection_error))
             return
+        }
+        if(!cached){
+            NewsCachingUtil.saveToCache(rssObject)
         }
         val adapter = FeedAdapter(thumbnailDownloader, rssObject, activity?.baseContext as Context)
         newsRecyclerView?.adapter = adapter

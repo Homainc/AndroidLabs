@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import com.homa_inc.androidlabs.Activities.AuthActivity
 import com.homa_inc.androidlabs.Activities.MainActivity
 import com.homa_inc.androidlabs.R
+import com.homa_inc.androidlabs.Utils.NewsCachingUtil
 import com.homa_inc.androidlabs.Utils.PictureUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
 
@@ -43,6 +44,7 @@ class ProfileViewFragment : Fragment() {
     }
 
     private fun logOutClick(){
+        NewsCachingUtil.clearCache()
         UserUtil.instance.logOut()
         startActivity(Intent(activity, AuthActivity::class.java))
         activity?.finish()

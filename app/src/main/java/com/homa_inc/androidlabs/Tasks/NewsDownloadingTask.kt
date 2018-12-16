@@ -16,12 +16,12 @@ class NewsDownloadingTask(private val receiver: NewsReceiver) : AsyncTask<String
 
     override fun onPostExecute(result: String?) {
         if(result == null) {
-            receiver.onNewsLoadPostExecuted(null)
+            receiver.onNewsLoadPostExecuted(null, false)
             return
         }
         val reader = JsonReader(StringReader(result))
         reader.isLenient = true
-        receiver.onNewsLoadPostExecuted(Gson().fromJson<RSSObject>(reader, RSSObject::class.java))
+        receiver.onNewsLoadPostExecuted(Gson().fromJson<RSSObject>(reader, RSSObject::class.java), false)
     }
 
     override fun doInBackground(vararg params: String?): String? {
