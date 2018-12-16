@@ -1,14 +1,12 @@
 package com.homa_inc.androidlabs.Fragments
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.homa_inc.androidlabs.Adapter.FeedAdapter
 import com.homa_inc.androidlabs.Adapter.FeedViewHolder
 import com.homa_inc.androidlabs.Models.RSSObject
@@ -19,13 +17,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
 import android.view.*
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.gson.stream.JsonReader
 import com.homa_inc.androidlabs.Interfaces.NewsReceiver
 import com.homa_inc.androidlabs.Tasks.NewsDownloadingTask
 import com.homa_inc.androidlabs.Utils.HttpUtil
 import com.homa_inc.androidlabs.Utils.UserUtil
-import java.io.StringReader
 import java.text.MessageFormat
 
 
@@ -52,10 +49,9 @@ class HomeFragment : Fragment(), NewsReceiver {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         newsRecyclerView = v.findViewById(R.id.newsRecyclerView)
-        val linearLayoutManager = LinearLayoutManager(activity?.baseContext, RecyclerView.VERTICAL, false)
         swipeRefresh = v.findViewById(R.id.swipeRefresh)
         swipeRefresh?.setOnRefreshListener { loadRSS() }
-        newsRecyclerView?.layoutManager = linearLayoutManager
+        newsRecyclerView?.layoutManager = getLayoutManager()
         if(UserUtil.instance.isFirstLogIn) {
             UserUtil.instance.isFirstLogIn = false
             showToast(MessageFormat.format(resources.getString(R.string.text_logged),
@@ -63,6 +59,12 @@ class HomeFragment : Fragment(), NewsReceiver {
         }
         loadRSS()
         return v
+    }
+
+    private fun getLayoutManager(): RecyclerView.LayoutManager? {
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            return LinearLayoutManager(activity?.baseContext, RecyclerView.VERTICAL, false)
+        return GridLayoutManager(activity?.baseContext, 2)
     }
 
     private fun setupThumbnailDownloader(){
