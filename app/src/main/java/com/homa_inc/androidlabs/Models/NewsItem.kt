@@ -1,7 +1,5 @@
 package com.homa_inc.androidlabs.Models
 
-import androidx.appcompat.widget.DialogTitle
-
 data class NewsItem(
     val title: String,
     val pubDate: String,

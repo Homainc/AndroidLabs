@@ -69,6 +69,7 @@ class FeedAdapter(
         val description = rssObject.items[position].description
         holder.textViewContent.text = Jsoup.parse(description).text()
         holder.textViewPubDate.text = rssObject.items[position].pubDate
+        holder.imageView.setImageDrawable(null)
         thumbnailDownloader.queueThumbnail(holder, rssObject.items[position].enclosure.link)
         holder.setItemClickListener(object : NewsItemClickListener {
             override fun onClick(view: View, position: Int, isLongClick: Boolean) {

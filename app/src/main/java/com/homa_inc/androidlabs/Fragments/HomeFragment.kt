@@ -142,7 +142,7 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
     override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
         swipeRefresh?.isRefreshing = false
         if(rssObject == null) {
-            Toasty.error(context!!, R.string.text_connection_error,
+            Toasty.error(activity!!, R.string.text_connection_error,
                 Toast.LENGTH_SHORT, true).show()
             return
         }
@@ -156,7 +156,7 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
     }
 
     override fun openWebView(link: String) {
-        if(HttpUtil.hasConnection(context!!)){
+        if(HttpUtil.hasConnection(activity!!)){
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToWebViewActivity(link))
             return
         }

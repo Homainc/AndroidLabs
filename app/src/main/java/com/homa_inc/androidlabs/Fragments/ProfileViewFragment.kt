@@ -64,7 +64,6 @@ class ProfileViewFragment : Fragment() {
             profileImageView?.setImageResource(R.drawable.blank_profile)
             return
         }
-        Log.i("checkTAG", userPhotoFile.path)
         //val bitmap = PictureUtil.getScaledBitmap(photoFile?.path as String, activity as AppCompatActivity)
         val bitmap = PictureUtil.getRoundedBitMap(userPhotoFile.path as String, activity as AppCompatActivity)
         profileImageView?.setImageDrawable(bitmap)

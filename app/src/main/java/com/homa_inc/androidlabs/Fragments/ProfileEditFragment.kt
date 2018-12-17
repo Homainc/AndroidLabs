@@ -82,6 +82,7 @@ class ProfileEditFragment : ProfileFragment() {
             actionBarListener?.hideHomeButton()
             Toasty.success(context as Context, R.string.profile_saved, Toast.LENGTH_SHORT, true).show()
             findNavController().navigate(R.id.profileViewFragment)
+            return
         }
         Toasty.error(context as Context, R.string.error_incorrect_input, Toast.LENGTH_SHORT, true).show()
     }
