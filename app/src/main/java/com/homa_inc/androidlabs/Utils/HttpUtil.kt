@@ -3,6 +3,7 @@ package com.homa_inc.androidlabs.Utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Point
 import android.net.ConnectivityManager
 import java.io.BufferedInputStream
 import java.io.BufferedReader
@@ -36,7 +37,7 @@ class HttpUtil {
             return resultStream
         }
 
-        fun bitmapFromUrl(urlString: String): Bitmap? {
+        fun bitmapFromUrl(urlString: String, size: Point): Bitmap? {
             var img: Bitmap? = null
             try{
                 val input = URL(urlString).openStream()
@@ -44,7 +45,8 @@ class HttpUtil {
             } catch (ex: Exception){
                 ex.printStackTrace()
             }
-            return img
+            img?: return null
+            return PictureUtil.getScaledBitmap(img, size)
         }
 
         @Suppress("DEPRECATION")

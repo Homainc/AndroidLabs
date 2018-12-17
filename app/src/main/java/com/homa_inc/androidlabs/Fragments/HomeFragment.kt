@@ -15,6 +15,7 @@ import com.homa_inc.androidlabs.Utils.ThumbnailDownloader
 import java.lang.StringBuilder
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.view.*
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
@@ -47,7 +48,9 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        thumbnailDownloader = ThumbnailDownloader(Handler())
+        val size = Point()
+        activity?.windowManager?.defaultDisplay?.getSize(size)
+        thumbnailDownloader = ThumbnailDownloader(Handler(), size)
         setupThumbnailDownloader()
     }
 
@@ -141,8 +144,10 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
 
     override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
         swipeRefresh?.isRefreshing = false
+        val currentContent = context
+        currentContent?: return
         if(rssObject == null) {
-            Toasty.error(activity!!, R.string.text_connection_error,
+            Toasty.error(currentContent, R.string.text_connection_error,
                 Toast.LENGTH_SHORT, true).show()
             return
         }
@@ -150,7 +155,7 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
             NewsCachingUtil.saveToCache(rssObject)
         }
         val adapter = FeedAdapter(thumbnailDownloader, rssObject,
-            activity?.baseContext!!, this@HomeFragment)
+            currentContent, this@HomeFragment)
         newsRecyclerView?.adapter = adapter
         adapter.notifyDataSetChanged()
     }

@@ -38,6 +38,21 @@ class PictureUtil {
             options.inSampleSize = inSampleSize*2
             return BitmapFactory.decodeFile(path, options) as Bitmap
         }
+        public fun getScaledBitmap(bitmap: Bitmap, size: Point): Bitmap {
+            var inSampleSize = 1
+            if(bitmap.height > size.y || bitmap.width > size.y){
+                if(bitmap.height > size.y)
+                    inSampleSize = bitmap.height / size.y
+                else
+                    inSampleSize = bitmap.width / size.x
+            }
+            if(inSampleSize == 0)
+                inSampleSize = 1
+            return Bitmap.createScaledBitmap(bitmap,
+                bitmap.width/inSampleSize,
+                bitmap.height/inSampleSize,
+                false)
+        }
         fun getScaledBitmap(path: String, activity: AppCompatActivity): Bitmap{
             val size = Point()
             activity.windowManager.defaultDisplay.getSize(size)

@@ -1,6 +1,7 @@
 package com.homa_inc.androidlabs.Utils
 
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
@@ -11,7 +12,9 @@ import com.homa_inc.androidlabs.Interfaces.HandlerCallBack
 import java.io.IOException
 
 
-class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThread("ThumbnailDownloader"),
+class ThumbnailDownloader<T>(
+    private val mResponseHandler: Handler,
+    private val size: Point) : HandlerThread("ThumbnailDownloader"),
     HandlerCallBack {
 
     companion object {
@@ -62,7 +65,7 @@ class ThumbnailDownloader<T>(private val mResponseHandler: Handler) : HandlerThr
     private fun handleRequest(target: T) {
         try {
             val url = mRequestMap[target] ?: return
-            val bitmap =  HttpUtil.bitmapFromUrl(url)
+            val bitmap =  HttpUtil.bitmapFromUrl(url, size)
             mResponseHandler.post{
                 if(mRequestMap[target] != url || mHasQuit)
                     return@post
