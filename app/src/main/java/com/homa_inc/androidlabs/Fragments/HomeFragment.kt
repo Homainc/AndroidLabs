@@ -1,6 +1,9 @@
 package com.homa_inc.androidlabs.Fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
@@ -11,18 +14,24 @@ import com.homa_inc.androidlabs.Adapter.FeedAdapter
 import com.homa_inc.androidlabs.Adapter.FeedViewHolder
 import com.homa_inc.androidlabs.Models.RSSObject
 import com.homa_inc.androidlabs.R
+import com.google.android.material.snackbar.Snackbar
 import com.homa_inc.androidlabs.Utils.ThumbnailDownloader
 import java.lang.StringBuilder
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.Bitmap
 import android.graphics.Point
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
+import android.os.Build
 import android.view.*
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.homa_inc.androidlabs.Extensions.hideKeyboard
+import com.homa_inc.androidlabs.Extensions.NetReceiver
 import com.homa_inc.androidlabs.Interfaces.NavigatorToWebView
+import com.homa_inc.androidlabs.Interfaces.NetListener
 import com.homa_inc.androidlabs.Interfaces.NewsReceiver
 import com.homa_inc.androidlabs.Tasks.NewsDownloadingTask
 import com.homa_inc.androidlabs.Utils.HttpUtil
@@ -32,7 +41,7 @@ import es.dmoral.toasty.Toasty
 import java.text.MessageFormat
 
 
-class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
+class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView, NetListener {
 
     companion object {
         private const val RSS_API_KEY =
@@ -41,6 +50,7 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
             "https://api.rss2json.com/v1/api.json?rss_url="
     }
 
+    private var isConnected = false
     private var newsRecyclerView: RecyclerView? = null
     private var swipeRefresh: SwipeRefreshLayout? = null
     private lateinit var thumbnailDownloader: ThumbnailDownloader<FeedViewHolder>
@@ -56,9 +66,10 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
+        isConnected = false
         newsRecyclerView = v.findViewById(R.id.newsRecyclerView)
         swipeRefresh = v.findViewById(R.id.swipeRefresh)
-        swipeRefresh?.setOnRefreshListener { loadRSS() }
+        swipeRefresh?.setOn-RefreshListener { loadRSS() }
         newsRecyclerView?.layoutManager = getLayoutManager()
         if(UserUtil.instance.isFirstLogIn) {
             UserUtil.instance.isFirstLogIn = false
@@ -138,11 +149,51 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onResume() {
+        super.onResume()
+        val filter = IntentFilter()
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        filter.addAction("com.homa_inc.androidlabs.CONNECTIVITY_CHANGE")
+        context?.registerReceiver(NetReceiver(this), filter)
+        registerConnectivityNetworkMonitorForAPI21AndUp()
+    }
+
     override fun onNewsLoadPreExecuted() {
         swipeRefresh?.isRefreshing = true
     }
 
-    override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
+    @SuppressLint("ObsoleteSdkInt")
+    private fun registerConnectivityNetworkMonitorForAPI21AndUp() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return
+        }
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val builder = NetworkRequest.Builder()
+        connectivityManager.registerNetworkCallback(
+            builder.build(),
+            object: ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    context?.sendBroadcast(
+                        getConnectivityIntent(false)
+                    )
+                }
+                override fun onLost(network: Network) {
+                    context?.sendBroadcast(
+                        getConnectivityIntent(true)
+                    )
+                }
+            }
+        )
+    }
+
+    private fun getConnectivityIntent(noConnection : Boolean): Intent {
+        val intent = Intent()
+        intent.action = "com.homa_inc.androidlabs.CONNECTIVITY_CHANGE"
+        intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, noConnection)
+        return intent
+    }
+
+        override fun onNewsLoadPostExecuted(rssObject: RSSObject?, cached: Boolean) {
         swipeRefresh?.isRefreshing = false
         val currentContent = context
         currentContent?: return
@@ -166,5 +217,16 @@ class HomeFragment : Fragment(), NewsReceiver, NavigatorToWebView {
             return
         }
         Toasty.error(context!!, R.string.no_internet, Toast.LENGTH_SHORT, true).show()
+    }
+
+    override fun onConnectedNet() {
+        if(!isConnected) {
+            isConnected = true
+        }
+        else{
+            Toasty.info(context as Context, "connected", Toast.LENGTH_SHORT, true).show()
+            Snackbar.make(view as View, "Network connected", Snackbar.LENGTH_LONG)
+                .setAction("reload news", { loadRSS() }).show()
+        }
     }
 }
